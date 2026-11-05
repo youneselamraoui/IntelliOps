@@ -1,0 +1,19 @@
+- name: Docker + Compose + git
+  hosts: app:db
+  become: true
+  tasks:
+    - name: Paquets
+      ansible.builtin.apt:
+        name: [docker.io, docker-compose-v2, git]
+        update_cache: true
+        state: present
+    - name: Docker actif au démarrage
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+    - name: younes dans le groupe docker
+      ansible.builtin.user:
+        name: younes
+        groups: docker
+        append: true

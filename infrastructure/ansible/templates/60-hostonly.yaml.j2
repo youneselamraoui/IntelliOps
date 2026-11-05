@@ -1,0 +1,7 @@
+network:
+  version: 2
+  ethernets:
+    {{ hostonly_if }}:
+      dhcp4: false
+      addresses:
+        - {{ ips[inventory_hostname] }}/24

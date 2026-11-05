@@ -1,0 +1,58 @@
+# ansible-playbook -i inventory-bootstrap.ini 00-bootstrap.yml -k -K
+- name: Nom d'hôte, IP host-only, /etc/hosts
+  hosts: all
+  become: true
+  tasks:
+    - name: Vérifier que l'interface host-only existe
+      ansible.builtin.assert:
+        that: hostonly_if in ansible_facts.interfaces
+        fail_msg: "Interface {{ hostonly_if }} absente"
+
+    - name: Nom d'hôte
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Ligne 127.0.1.1
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: "127.0.1.1 {{ inventory_hostname }}"
+
+    - name: Résolution des machines
+      ansible.builtin.blockinfile:
+        path: /etc/hosts
+        block: |
+          {% for h, ip in ips.items() %}
+          {{ ip }} {{ h }}
+          {% endfor %}
+
+    - name: Netplan host-only (IP fixe)
+      ansible.builtin.template:
+        src: 60-hostonly.yaml.j2
+        dest: /etc/netplan/60-hostonly.yaml
+        mode: "0600"
+      notify: Appliquer netplan
+
+  handlers:
+    - name: Appliquer netplan
+      ansible.builtin.command: netplan apply
+
+- name: Clé SSH de la VM de contrôle
+  hosts: vm-controle
+  become: true
+  tasks:
+    - name: Générer la clé
+      ansible.builtin.user:
+        name: younes
+        generate_ssh_key: true
+        ssh_key_type: ed25519
+      register: k
+    - ansible.builtin.set_fact:
+        controle_pubkey: "{{ k.ssh_public_key }}"
+
+- name: Autoriser la VM de contrôle partout
+  hosts: all
+  tasks:
+    - ansible.builtin.authorized_key:
+        user: younes
+        key: "{{ hostvars['vm-controle'].controle_pubkey }}"

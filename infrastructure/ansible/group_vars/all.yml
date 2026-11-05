@@ -1,0 +1,7 @@
+hostonly_if: ens37
+ips:
+  vm-controle: 192.168.50.9
+  vm-staging: 192.168.50.10
+  vm-prod: 192.168.50.11
+  vm-staging-db: 192.168.50.12
+  vm-prod-db: 192.168.50.13
