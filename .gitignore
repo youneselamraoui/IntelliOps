@@ -46,3 +46,8 @@ auth.json
 !.vscode/extensions.json
 .DS_Store
 Thumbs.db
+
+# Docker : jamais de vrais secrets dans Git
+.env.*
+!.env.*.example
+backups/

@@ -1,0 +1,16 @@
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  backend:
+    restart: always
+    mem_limit: 512m
+    cpus: 1.0
+    logging: *logging
+  frontend:
+    restart: always
+    mem_limit: 128m
+    logging: *logging

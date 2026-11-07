@@ -1,0 +1,7 @@
+services:
+  backend:
+    restart: unless-stopped
+    mem_limit: 512m
+  frontend:
+    restart: unless-stopped
+    mem_limit: 128m
