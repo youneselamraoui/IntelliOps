@@ -1,78 +1,85 @@
 services:
   backend:
-    restart: unless-stopped
-    mem_limit: 512m
+    build:
+      target: production
+    env_file:
+      - ./infrastructure/.env.staging
+    ports:
+      - "${BACKEND_PORT:-8000}:80"
+    restart: on-failure
+
   frontend:
-    restart: unless-stopped
-    mem_limit: 128m
+    build:
+      target: production
+      args:
+        VITE_API_URL: ${PUBLIC_API_URL}
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    restart: on-failure
 
   jenkins:
-    profiles: ["tools"]
-    image: jenkins/jenkins:lts
+    image: jenkins/jenkins:lts-jdk17
     restart: unless-stopped
+    user: root
     ports:
-      - "${JENKINS_PORT:-8082}:8080"
+      - "8081:8080"
+      - "50000:50000"
     volumes:
-      - jenkins-home:/var/jenkins_home
-    mem_limit: 1g
-
-  sonarqube-db:
-    profiles: ["tools"]
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: ${SONAR_DB_PASSWORD}
-      POSTGRES_DB: sonar
-    volumes:
-      - sonar-db:/var/lib/postgresql/data
-    mem_limit: 256m
-
-  sonarqube:
-    profiles: ["tools"]
-    image: sonarqube:community
-    restart: unless-stopped
-    depends_on:
-      - sonarqube-db
-    environment:
-      SONAR_JDBC_URL: jdbc:postgresql://sonarqube-db:5432/sonar
-      SONAR_JDBC_USERNAME: sonar
-      SONAR_JDBC_PASSWORD: ${SONAR_DB_PASSWORD}
-    ports:
-      - "${SONAR_PORT:-9000}:9000"
-    volumes:
-      - sonar-data:/opt/sonarqube/data
-      - sonar-extensions:/opt/sonarqube/extensions
-    mem_limit: 2g
-
-  sonar-scanner:
-    profiles: ["tools"]
-    image: sonarsource/sonar-scanner-cli
-    depends_on:
-      - sonarqube
-    environment:
-      SONAR_HOST_URL: http://sonarqube:9000
-      SONAR_TOKEN: ${SONAR_TOKEN:-}
-    volumes:
-      - ./:/usr/src
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    mem_limit: 1024m
+    networks:
+      - reseau_app
 
   trivy:
-    profiles: ["tools"]
     image: aquasec/trivy:latest
+    profiles: ["security"]
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - trivy-cache:/root/.cache/
-      - ./:/project:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - trivy_cache:/root/.cache/
+    networks:
+      - reseau_app
 
-  zap:
-    profiles: ["tools"]
+  owasp-zap:
     image: ghcr.io/zaproxy/zaproxy:stable
+    profiles: ["security"]
+    command: zap-baseline.py -t http://frontend:80
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - reseau_app
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
     volumes:
-      - ./reports:/zap/wrk:rw
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    mem_limit: 256m
+    networks:
+      - reseau_app
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    mem_limit: 256m
+    depends_on:
+      - prometheus
+    networks:
+      - reseau_app
 
 volumes:
-  jenkins-home:
-  sonar-db:
-  sonar-data:
-  sonar-extensions:
-  trivy-cache:
+  jenkins_data:
+  trivy_cache:
+  prometheus_data:
+  grafana_data:
