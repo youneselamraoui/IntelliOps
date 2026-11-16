@@ -1,15 +1,16 @@
 services:
   backend:
-    build:
-      target: production
     env_file:
       - ./infrastructure/.env.prod
-    ports:
-      - "${BACKEND_PORT:-8000}:80"
     restart: always
-    mem_limit: 512m
+    ports:
+      - "8000:80"
+    deploy:
+      resources:
+        limits:
+          memory: 1g
     logging:
-      driver: json-file
+      driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
@@ -17,14 +18,67 @@ services:
   frontend:
     build:
       target: production
-      args:
-        VITE_API_URL: ${PUBLIC_API_URL}
-    ports:
-      - "${FRONTEND_PORT:-8080}:80"
+    env_file:
+      - ./infrastructure/.env.prod
     restart: always
-    mem_limit: 256m
+    ports:
+      - "80:80"
+    deploy:
+      resources:
+        limits:
+          memory: 256m
     logging:
-      driver: json-file
+      driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: intelliops_prometheus_prod
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_prod_data:/prometheus
+    networks:
+      - reseau_app
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: intelliops_grafana_prod
+    restart: always
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_prod_data:/var/lib/grafana
+    networks:
+      - reseau_app
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  prometheus_prod_data:
+  grafana_prod_data:
