@@ -34,7 +34,8 @@ RUN --mount=type=cache,target=/tmp/composer-cache \
 
 COPY . .
 
-RUN composer dump-autoload \
+RUN composer dump-autoload --no-scripts \
+    && sed -i 's/\r$//' entrypoint.sh \
     && chmod +x entrypoint.sh \
     && chown -R www-data:www-data storage bootstrap/cache
 
@@ -60,8 +61,10 @@ RUN --mount=type=cache,target=/tmp/composer-cache \
 
 COPY . .
 
-RUN composer dump-autoload --no-dev --classmap-authoritative \
+RUN composer dump-autoload --no-dev --no-scripts --classmap-authoritative \
+    && sed -i 's/\r$//' entrypoint.sh \
     && chmod +x entrypoint.sh \
+    && rm -f bootstrap/cache/*.php \
     && mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
