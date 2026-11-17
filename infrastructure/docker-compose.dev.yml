@@ -5,13 +5,16 @@ services:
       - "5432:5432"
 
   backend:
+    build:
+      target: development
     restart: on-failure
     env_file:
       - ./infrastructure/.env.dev
     ports:
-      - "8000:80"
+      - "8000:8000"
     volumes:
       - ./backend:/var/www/html
+      - /var/www/html/vendor
     depends_on:
       database:
         condition: service_healthy
