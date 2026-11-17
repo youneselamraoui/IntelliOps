@@ -2,24 +2,59 @@ services:
   backend:
     build:
       target: production
+    restart: on-failure
     env_file:
       - ./infrastructure/.env.staging
+    environment:
+      APP_ENV: staging
+      APP_DEBUG: "false"
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      KEYCLOAK_URL: http://keycloak:8080
     ports:
-      - "${BACKEND_PORT:-8000}:80"
-    restart: on-failure
+      - "8000:80"
+    depends_on:
+      database:
+        condition: service_healthy
 
   frontend:
     build:
       target: production
-      args:
-        VITE_API_URL: ${PUBLIC_API_URL}
-    ports:
-      - "${FRONTEND_PORT:-8080}:80"
     restart: on-failure
+    env_file:
+      - ./infrastructure/.env.staging
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+      VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL}
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+      - keycloak
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: intelliops_keycloak
+    restart: on-failure
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin123}
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "8082:8080"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    networks:
+      - reseau_app
 
   jenkins:
     image: jenkins/jenkins:lts-jdk17
-    restart: unless-stopped
+    container_name: intelliops_jenkins
+    restart: on-failure
     user: root
     ports:
       - "8081:8080"
@@ -27,13 +62,29 @@ services:
     volumes:
       - jenkins_data:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-    mem_limit: 1024m
+    networks:
+      - reseau_app
+
+  sonarqube:
+    image: sonarqube:lts-community
+    container_name: intelliops_sonarqube
+    restart: on-failure
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
     networks:
       - reseau_app
 
   trivy:
     image: aquasec/trivy:latest
-    profiles: ["security"]
+    container_name: intelliops_trivy
+    restart: on-failure
+    entrypoint: ["sleep", "infinity"]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - trivy_cache:/root/.cache/
@@ -42,8 +93,11 @@ services:
 
   owasp-zap:
     image: ghcr.io/zaproxy/zaproxy:stable
-    profiles: ["security"]
-    command: zap-baseline.py -t http://frontend:80
+    container_name: intelliops_zap
+    restart: on-failure
+    command: zap.sh -daemon -host 0.0.0.0 -port 8090 -config api.disablekey=true
+    ports:
+      - "8090:8090"
     depends_on:
       - frontend
       - backend
@@ -52,34 +106,38 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
-    restart: unless-stopped
+    container_name: intelliops_prometheus
+    restart: on-failure
     ports:
       - "9090:9090"
     volumes:
-      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
-    mem_limit: 256m
     networks:
       - reseau_app
 
   grafana:
     image: grafana/grafana:latest
-    restart: unless-stopped
-    ports:
-      - "3002:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
-    volumes:
-      - grafana_data:/var/lib/grafana
-    mem_limit: 256m
+    container_name: intelliops_grafana
+    restart: on-failure
     depends_on:
       - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin123}
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
     networks:
       - reseau_app
 
 volumes:
+  keycloak_data:
   jenkins_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
   trivy_cache:
   prometheus_data:
   grafana_data:
