@@ -5,15 +5,9 @@ services:
     restart: always
     ports:
       - "8000:80"
-    deploy:
-      resources:
-        limits:
-          memory: 1g
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    depends_on:
+      database:
+        condition: service_healthy
 
   frontend:
     build:
@@ -23,15 +17,24 @@ services:
     restart: always
     ports:
       - "80:80"
-    deploy:
-      resources:
-        limits:
-          memory: 256m
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    depends_on:
+      - backend
+      - keycloak
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: intelliops_keycloak_prod
+    restart: always
+    command: start --http-enabled=true --hostname-strict=false
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    ports:
+      - "8082:8080"
+    volumes:
+      - keycloak_prod_data:/opt/keycloak/data
+    networks:
+      - reseau_app
 
   prometheus:
     image: prom/prometheus:latest
@@ -44,15 +47,6 @@ services:
       - prometheus_prod_data:/prometheus
     networks:
       - reseau_app
-    deploy:
-      resources:
-        limits:
-          memory: 256m
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
   grafana:
     image: grafana/grafana:latest
@@ -69,16 +63,8 @@ services:
       - grafana_prod_data:/var/lib/grafana
     networks:
       - reseau_app
-    deploy:
-      resources:
-        limits:
-          memory: 256m
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
 volumes:
+  keycloak_prod_data:
   prometheus_prod_data:
   grafana_prod_data:

@@ -1,9 +1,8 @@
-name: intelliops-db
-
 services:
-  db:
+  database:
     image: pgvector/pgvector:pg16
-    restart: ${DB_RESTART_POLICY:-unless-stopped}
+    container_name: intelliops_db
+    restart: always
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
@@ -11,34 +10,38 @@ services:
     ports:
       - "${DB_BIND_IP:-0.0.0.0}:${DB_PORT:-5432}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./backups:/backups
-    mem_limit: ${DB_MEM_LIMIT:-512m}
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - db_data:/var/lib/postgresql/data
+      - ./infrastructure/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - reseau_db
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
       interval: 10s
+      timeout: 5s
       retries: 5
 
   pgadmin:
-    image: dpage/pgadmin4
-    restart: ${DB_RESTART_POLICY:-unless-stopped}
+    image: dpage/pgadmin4:latest
+    container_name: intelliops_pgadmin
+    restart: always
+    depends_on:
+      database:
+        condition: service_healthy
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
     ports:
       - "${DB_BIND_IP:-0.0.0.0}:${PGADMIN_PORT:-5050}:80"
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    mem_limit: ${PGADMIN_MEM_LIMIT:-384m}
-    depends_on:
-      db:
-        condition: service_healthy
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - reseau_db
+
+networks:
+  reseau_db:
+    driver: bridge
 
 volumes:
-  pgdata:
-  pgadmin-data:
+  db_data:
+  pgadmin_data:

@@ -1,30 +1,60 @@
 services:
   backend:
+    build:
+      target: production
+    restart: on-failure
     env_file:
       - ./infrastructure/.env.staging
+    environment:
+      APP_ENV: staging
+      APP_DEBUG: "false"
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      KEYCLOAK_URL: http://keycloak:8080
     ports:
       - "8000:80"
-    deploy:
-      resources:
-        limits:
-          memory: 512m
+    depends_on:
+      database:
+        condition: service_healthy
 
   frontend:
     build:
       target: production
+    restart: on-failure
     env_file:
       - ./infrastructure/.env.staging
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+      VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL}
     ports:
       - "8080:80"
-    deploy:
-      resources:
-        limits:
-          memory: 256m
+    depends_on:
+      - backend
+      - keycloak
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: intelliops_keycloak
+    restart: on-failure
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin123}
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "8082:8080"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    networks:
+      - reseau_app
 
   jenkins:
     image: jenkins/jenkins:lts-jdk17
     container_name: intelliops_jenkins
-    restart: unless-stopped
+    restart: on-failure
     user: root
     ports:
       - "8081:8080"
@@ -34,15 +64,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - reseau_app
-    deploy:
-      resources:
-        limits:
-          memory: 1g
 
   sonarqube:
     image: sonarqube:lts-community
     container_name: intelliops_sonarqube
-    restart: unless-stopped
+    restart: on-failure
     environment:
       SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
     ports:
@@ -53,42 +79,35 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
     networks:
       - reseau_app
-    deploy:
-      resources:
-        limits:
-          memory: 2g
 
   trivy:
     image: aquasec/trivy:latest
     container_name: intelliops_trivy
+    restart: on-failure
     entrypoint: ["sleep", "infinity"]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - trivy_cache:/root/.cache/
     networks:
       - reseau_app
-    deploy:
-      resources:
-        limits:
-          memory: 512m
 
   owasp-zap:
     image: ghcr.io/zaproxy/zaproxy:stable
     container_name: intelliops_zap
+    restart: on-failure
     command: zap.sh -daemon -host 0.0.0.0 -port 8090 -config api.disablekey=true
     ports:
       - "8090:8090"
+    depends_on:
+      - frontend
+      - backend
     networks:
       - reseau_app
-    deploy:
-      resources:
-        limits:
-          memory: 1g
 
   prometheus:
     image: prom/prometheus:latest
     container_name: intelliops_prometheus
-    restart: unless-stopped
+    restart: on-failure
     ports:
       - "9090:9090"
     volumes:
@@ -96,15 +115,11 @@ services:
       - prometheus_data:/prometheus
     networks:
       - reseau_app
-    deploy:
-      resources:
-        limits:
-          memory: 256m
 
   grafana:
     image: grafana/grafana:latest
     container_name: intelliops_grafana
-    restart: unless-stopped
+    restart: on-failure
     depends_on:
       - prometheus
     environment:
@@ -116,12 +131,9 @@ services:
       - grafana_data:/var/lib/grafana
     networks:
       - reseau_app
-    deploy:
-      resources:
-        limits:
-          memory: 256m
 
 volumes:
+  keycloak_data:
   jenkins_data:
   sonarqube_data:
   sonarqube_extensions:
