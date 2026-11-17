@@ -52,3 +52,13 @@ Thumbs.db
 !.env.*.example
 backups/
 reports/
+
+
+# Environnement virtuel
+.venv/
+# Python
+__pycache__/
+*.pyc
+
+# Tests
+.pytest_cache/

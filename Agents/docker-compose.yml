@@ -1,0 +1,38 @@
+
+services:
+
+  agent1:
+    build:
+      context: .
+      dockerfile: Agent_1/Dockerfile
+    container_name: intelliops-agent1
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./Agent_1:/app/Agent_1
+      - ./shared:/app/shared
+    restart: unless-stopped
+
+  agent2:
+    build:
+      context: .
+      dockerfile: Agent_2/Dockerfile
+    container_name: intelliops-agent2
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./Agent_2:/app/Agent_2
+      - ./shared:/app/shared
+    restart: unless-stopped
+
+  agent3:
+    build:
+      context: .
+      dockerfile: Agent_3/Dockerfile
+    container_name: intelliops-agent3
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./Agent_3:/app/Agent_3
+      - ./shared:/app/shared
+    restart: unless-stopped
