@@ -103,9 +103,9 @@ class GitLabNormalizer:
 
         return [event]
 
+    
     def extract_error_info(self, log):
-
-        # Valeurs par défaut si une information est introuvable
+    
         error_info = {
             "error_type": "UnknownError",
             "error_message": "No error message extracted",
@@ -113,42 +113,61 @@ class GitLabNormalizer:
             "file": None,
             "line": None
         }
-
+    
         if not log:
             return error_info
-
-        # 1. Extraire le type et le nom du test
+    
+        # 1. Extraire le nom d'un test en échec
         test_match = re.search(
-            r"(?:FAIL|ERROR):\s+([^\s(]+)",
+            r"(?:FAIL|ERROR):\s+([^\s(]+)\s+\(",
             log
         )
-
+    
         if test_match:
             error_info["test_name"] = test_match.group(1)
-
+    
         # 2. Extraire le fichier et le numéro de ligne
         file_match = re.search(
             r'File "([^"]+)", line (\d+)',
             log
         )
-
+    
         if file_match:
             error_info["file"] = file_match.group(1)
             error_info["line"] = int(file_match.group(2))
-
-        # 3. Extraire le type et le message de l'exception
+    
+        # 3. Chercher une exception Python
         error_matches = re.findall(
             r"([A-Za-z_][A-Za-z0-9_.]*(?:Error|Exception)):\s*(.*)",
             log
         )
-
+    
         if error_matches:
             error_type, error_message = error_matches[-1]
-
+    
             error_info["error_type"] = error_type
             error_info["error_message"] = error_message.strip()
-
+    
+            return error_info
+    
+        # 4. Si aucune exception n'est trouvée,
+        # chercher un code de sortie non nul
+        exit_match = re.search(
+            r"Job failed: exit code (\d+)",
+            log
+        )
+    
+        if exit_match:
+            exit_code = exit_match.group(1)
+    
+            error_info["error_type"] = "JobExitCode"
+            error_info["error_message"] = (
+                f"Job terminated with exit code {exit_code}. "
+                "Underlying cause not identified."
+            )
+    
         return error_info
+    
 
     def build_message(self, pipeline, job, error_info):
 
