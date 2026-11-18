@@ -1,8 +1,8 @@
-from abc import ABC , abstracteethod
+from abc import ABC , abstractmethod
 
 class BaseCollector(ABC) :
 
-    @abstracteethod
+    @abstractmethod
     def collect(self):
 
         pass
