@@ -24,10 +24,11 @@
             "project_id": "89112860",
             "pipeline_id": 3084768076,
             "status": "failed"
+        },
+        {
+            "project_id": "89112860",
+            "pipeline_id": 3085974705,
+            "status": "failed"
         }
     ]
 }
-
-
-
-// je stock les elements deja traité ici , apres je vis changer l'emplacement a DataBase
