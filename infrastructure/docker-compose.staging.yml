@@ -1,78 +1,138 @@
 services:
   backend:
-    restart: unless-stopped
-    mem_limit: 512m
+    build:
+      target: production
+    restart: on-failure
+    env_file:
+      - ./infrastructure/.env.staging
+    environment:
+      APP_ENV: staging
+      APP_DEBUG: "false"
+      KEYCLOAK_URL: http://keycloak:8080
+    # php-fpm (9000) n'est joignable que par le nginx du frontend, via reseau_app
+    expose:
+      - "9000"
+
   frontend:
-    restart: unless-stopped
-    mem_limit: 128m
+    build:
+      target: production
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api}
+        VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL:?VITE_KEYCLOAK_URL manquant dans .env.staging}
+    restart: on-failure
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:?KEYCLOAK_VERSION manquant dans .env.staging}
+    container_name: intelliops_keycloak
+    restart: on-failure
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?KEYCLOAK_ADMIN_PASSWORD manquant dans .env.staging}
+      KC_HTTP_ENABLED: "true"
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://${DB_HOST:?DB_HOST manquant dans .env.staging}:${DB_PORT:-5432}/${KC_DB_NAME:-keycloak}
+      KC_DB_USERNAME: ${DB_USERNAME:?DB_USERNAME manquant dans .env.staging}
+      KC_DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD manquant dans .env.staging}
+    ports:
+      # Pour limiter : "IP_VMNET:8082:8080" (ufw ne filtre pas les ports Docker)
+      - "8082:8080"
+    networks:
+      - reseau_app
 
   jenkins:
-    profiles: ["tools"]
-    image: jenkins/jenkins:lts
-    restart: unless-stopped
+    image: jenkins/jenkins:${JENKINS_VERSION:?JENKINS_VERSION manquant dans .env.staging}
+    container_name: intelliops_jenkins
+    restart: on-failure
+    user: root   # + socket Docker = accès root à l'hôte : limiter le port à une IP
     ports:
-      - "${JENKINS_PORT:-8082}:8080"
+      - "8081:8080"
+      - "50000:50000"
     volumes:
-      - jenkins-home:/var/jenkins_home
-    mem_limit: 1g
-
-  sonarqube-db:
-    profiles: ["tools"]
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: ${SONAR_DB_PASSWORD}
-      POSTGRES_DB: sonar
-    volumes:
-      - sonar-db:/var/lib/postgresql/data
-    mem_limit: 256m
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - reseau_app
 
   sonarqube:
-    profiles: ["tools"]
-    image: sonarqube:community
-    restart: unless-stopped
-    depends_on:
-      - sonarqube-db
+    image: sonarqube:${SONARQUBE_VERSION:?SONARQUBE_VERSION manquant dans .env.staging}
+    container_name: intelliops_sonarqube
+    restart: on-failure
     environment:
-      SONAR_JDBC_URL: jdbc:postgresql://sonarqube-db:5432/sonar
-      SONAR_JDBC_USERNAME: sonar
-      SONAR_JDBC_PASSWORD: ${SONAR_DB_PASSWORD}
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
     ports:
-      - "${SONAR_PORT:-9000}:9000"
+      - "9000:9000"
     volumes:
-      - sonar-data:/opt/sonarqube/data
-      - sonar-extensions:/opt/sonarqube/extensions
-    mem_limit: 2g
-
-  sonar-scanner:
-    profiles: ["tools"]
-    image: sonarsource/sonar-scanner-cli
-    depends_on:
-      - sonarqube
-    environment:
-      SONAR_HOST_URL: http://sonarqube:9000
-      SONAR_TOKEN: ${SONAR_TOKEN:-}
-    volumes:
-      - ./:/usr/src
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - reseau_app
 
   trivy:
-    profiles: ["tools"]
-    image: aquasec/trivy:latest
+    image: aquasec/trivy:${TRIVY_VERSION:?TRIVY_VERSION manquant dans .env.staging}
+    container_name: intelliops_trivy
+    restart: on-failure
+    entrypoint: ["sleep", "infinity"]
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - trivy-cache:/root/.cache/
-      - ./:/project:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - trivy_cache:/root/.cache/
+    networks:
+      - reseau_app
 
-  zap:
-    profiles: ["tools"]
-    image: ghcr.io/zaproxy/zaproxy:stable
+  owasp-zap:
+    image: ghcr.io/zaproxy/zaproxy:${ZAP_VERSION:?ZAP_VERSION manquant dans .env.staging}
+    container_name: intelliops_zap
+    restart: on-failure
+    command: >
+      zap.sh -daemon -host 0.0.0.0 -port 8090
+      -config api.key=${ZAP_API_KEY:?ZAP_API_KEY manquant dans .env.staging}
+      -config api.addrs.addr.name=.*
+      -config api.addrs.addr.regex=true
+    ports:
+      - "127.0.0.1:8090:8090"
+    depends_on:
+      - frontend
+    networks:
+      - reseau_app
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:?PROMETHEUS_VERSION manquant dans .env.staging}
+    container_name: intelliops_prometheus
+    restart: on-failure
+    ports:
+      - "127.0.0.1:9090:9090"
     volumes:
-      - ./reports:/zap/wrk:rw
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - reseau_app
+
+  grafana:
+    image: grafana/grafana:${GRAFANA_VERSION:?GRAFANA_VERSION manquant dans .env.staging}
+    container_name: intelliops_grafana
+    restart: on-failure
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD manquant dans .env.staging}
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - reseau_app
 
 volumes:
-  jenkins-home:
-  sonar-db:
-  sonar-data:
-  sonar-extensions:
-  trivy-cache:
+  jenkins_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  trivy_cache:
+  prometheus_data:
+  grafana_data:
