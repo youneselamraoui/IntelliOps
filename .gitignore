@@ -51,4 +51,9 @@ Thumbs.db
 .env.*
 !.env.*.example
 backups/
-reports/
+reports/*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.vault_pass
+*.pem

@@ -1,0 +1,55 @@
+---
+- name: Vérifier Docker sur les quatre VM
+  hosts: all
+  become: true
+  tasks:
+    - name: Lire la version de Docker
+      ansible.builtin.command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Afficher la version
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} : {{ docker_version.stdout }}"
+
+    - name: Démarrer Docker et l'activer au boot
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Tester que le démon répond
+      ansible.builtin.command: docker ps
+      changed_when: false
+
+- name: Créer les dossiers sur les VM application
+  hosts: app
+  become: true
+  tasks:
+    - name: Dossiers de l'application
+      ansible.builtin.file:
+        path: "/opt/intelliops/{{ item }}"
+        state: directory
+        owner: infra
+        group: infra
+        mode: "0755"
+      loop:
+        - app
+        - config
+        - logs
+
+- name: Créer les dossiers sur les VM base de données
+  hosts: db
+  become: true
+  tasks:
+    - name: Dossiers de la base de données
+      ansible.builtin.file:
+        path: "/opt/intelliops/{{ item }}"
+        state: directory
+        owner: infra
+        group: infra
+        mode: "0755"
+      loop:
+        - data
+        - backups
+        - config
