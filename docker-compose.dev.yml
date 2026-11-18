@@ -25,7 +25,7 @@ services:
       target: development
     restart: on-failure
     env_file:
-      - ./infrastructure/.env.dev
+      - ./.env.dev
     ports:
       - "8000:8000"
     volumes:
@@ -40,7 +40,7 @@ services:
       target: development
     restart: on-failure
     env_file:
-      - ./infrastructure/.env.dev
+      - ./.env.dev
     ports:
       - "5173:5173"
     volumes:

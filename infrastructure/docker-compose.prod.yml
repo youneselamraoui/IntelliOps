@@ -5,20 +5,9 @@ services:
     restart: always
     env_file:
       - ./infrastructure/.env.prod
-    # php-fpm (9000) n'est joignable que par backend-web, via reseau_app
-
-  backend-web:
-    image: nginx:1.27-alpine
-    container_name: intelliops_backend_web
-    restart: always
-    ports:
-      - "8000:80"
-    volumes:
-      - ./infrastructure/nginx/backend.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - backend
-    networks:
-      - reseau_app
+    # php-fpm (9000) n'est joignable que par le nginx du frontend, via reseau_app
+    expose:
+      - "9000"
 
   frontend:
     build:
@@ -30,7 +19,7 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - backend-web
+      - backend
 
   keycloak:
     image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:?KEYCLOAK_VERSION manquant dans .env.prod}
@@ -41,13 +30,14 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?KEYCLOAK_ADMIN_PASSWORD manquant dans .env.prod}
       KC_HTTP_ENABLED: "true"
-      KC_HOSTNAME: ${KC_HOSTNAME:?KC_HOSTNAME manquant dans .env.prod (ex: http://IP_VM_PROD:8082)}
+      KC_HOSTNAME: ${KC_HOSTNAME:?KC_HOSTNAME manquant dans .env.prod}
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://${DB_HOST:?DB_HOST manquant dans .env.prod}:${DB_PORT:-5432}/${KC_DB_NAME:-keycloak}
       KC_DB_USERNAME: ${DB_USERNAME:?DB_USERNAME manquant dans .env.prod}
       KC_DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD manquant dans .env.prod}
     ports:
-      - "8082:8080"   # accessible aux navigateurs : à limiter par pare-feu (ufw)
+      # Remplace IP_VMNET_OU_LAN par l'IP voulue (ufw ne filtre pas les ports Docker)
+      - "8082:8080"
     networks:
       - reseau_app
 
