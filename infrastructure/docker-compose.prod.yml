@@ -1,87 +1,84 @@
-x-logging: &logging
-  driver: json-file
-  options:
-    max-size: "10m"
-    max-file: "3"
-
 services:
   backend:
+    build:
+      target: production
     restart: always
-    mem_limit: 512m
-    cpus: 1.0
-    logging: *logging
+    env_file:
+      - ./infrastructure/.env.prod
+    # php-fpm (9000) n'est joignable que par backend-web, via reseau_app
+
+  backend-web:
+    image: nginx:1.27-alpine
+    container_name: intelliops_backend_web
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - ./infrastructure/nginx/backend.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - reseau_app
+
   frontend:
+    build:
+      target: production
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api}
+        VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL:?VITE_KEYCLOAK_URL manquant dans .env.prod}
     restart: always
-    mem_limit: 128m
-    logging: *logging
-
-  jenkins:
-    profiles: ["tools"]
-    image: jenkins/jenkins:lts
-    restart: unless-stopped
     ports:
-      - "${JENKINS_PORT:-8082}:8080"
-    volumes:
-      - jenkins-home:/var/jenkins_home
-    mem_limit: 1g
-
-  sonarqube-db:
-    profiles: ["tools"]
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: ${SONAR_DB_PASSWORD}
-      POSTGRES_DB: sonar
-    volumes:
-      - sonar-db:/var/lib/postgresql/data
-    mem_limit: 256m
-
-  sonarqube:
-    profiles: ["tools"]
-    image: sonarqube:community
-    restart: unless-stopped
+      - "80:80"
     depends_on:
-      - sonarqube-db
+      - backend-web
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:?KEYCLOAK_VERSION manquant dans .env.prod}
+    container_name: intelliops_keycloak_prod
+    restart: always
+    command: start
     environment:
-      SONAR_JDBC_URL: jdbc:postgresql://sonarqube-db:5432/sonar
-      SONAR_JDBC_USERNAME: sonar
-      SONAR_JDBC_PASSWORD: ${SONAR_DB_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?KEYCLOAK_ADMIN_PASSWORD manquant dans .env.prod}
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: ${KC_HOSTNAME:?KC_HOSTNAME manquant dans .env.prod (ex: http://IP_VM_PROD:8082)}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://${DB_HOST:?DB_HOST manquant dans .env.prod}:${DB_PORT:-5432}/${KC_DB_NAME:-keycloak}
+      KC_DB_USERNAME: ${DB_USERNAME:?DB_USERNAME manquant dans .env.prod}
+      KC_DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD manquant dans .env.prod}
     ports:
-      - "${SONAR_PORT:-9000}:9000"
-    volumes:
-      - sonar-data:/opt/sonarqube/data
-      - sonar-extensions:/opt/sonarqube/extensions
-    mem_limit: 2g
+      - "8082:8080"   # accessible aux navigateurs : à limiter par pare-feu (ufw)
+    networks:
+      - reseau_app
 
-  sonar-scanner:
-    profiles: ["tools"]
-    image: sonarsource/sonar-scanner-cli
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:?PROMETHEUS_VERSION manquant dans .env.prod}
+    container_name: intelliops_prometheus_prod
+    restart: always
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_prod_data:/prometheus
+    networks:
+      - reseau_app
+
+  grafana:
+    image: grafana/grafana:${GRAFANA_VERSION:?GRAFANA_VERSION manquant dans .env.prod}
+    container_name: intelliops_grafana_prod
+    restart: always
     depends_on:
-      - sonarqube
+      - prometheus
     environment:
-      SONAR_HOST_URL: http://sonarqube:9000
-      SONAR_TOKEN: ${SONAR_TOKEN:-}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD manquant dans .env.prod}
+    ports:
+      - "127.0.0.1:3000:3000"
     volumes:
-      - ./:/usr/src
-
-  trivy:
-    profiles: ["tools"]
-    image: aquasec/trivy:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - trivy-cache:/root/.cache/
-      - ./:/project:ro
-
-  zap:
-    profiles: ["tools"]
-    image: ghcr.io/zaproxy/zaproxy:stable
-    volumes:
-      - ./reports:/zap/wrk:rw
+      - grafana_prod_data:/var/lib/grafana
+    networks:
+      - reseau_app
 
 volumes:
-  jenkins-home:
-  sonar-db:
-  sonar-data:
-  sonar-extensions:
-  trivy-cache:
+  prometheus_prod_data:
+  grafana_prod_data:
