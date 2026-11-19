@@ -1,0 +1,8 @@
+env_name: staging
+compose_files: [docker-compose.yml, infrastructure/docker-compose.staging.yml]
+env_template: env.staging.j2
+env_file: infrastructure/.env.staging
+up_args: "--build"
+db_host: vm-staging-db
+db_password: "{{ vault_db_password_staging }}"
+app_key: "{{ vault_app_key_staging }}"

@@ -1,0 +1,57 @@
+# ansible-playbook 02-deploy.yml --limit staging_db --ask-vault-pass   (puis staging_app)
+- name: Bases de données
+  hosts: db
+  vars_files: [secrets.yml]
+  tasks:
+    - name: Cloner le dépôt (jeton de déploiement)
+      no_log: true
+      ansible.builtin.git:
+        repo: "https://{{ gitlab_user | urlencode }}:{{ gitlab_token | urlencode }}@{{ app_repo }}"
+        dest: "{{ app_dir }}"
+        version: "{{ app_branch }}"
+    - name: Générer le fichier .env
+      no_log: true
+      ansible.builtin.template:
+        src: "{{ env_template }}"
+        dest: "{{ app_dir }}/{{ env_file }}"
+        mode: "0600"
+    - name: Lancer la base
+      become: true
+      ansible.builtin.command:
+        cmd: "docker compose --project-directory . {% for f in compose_files %}-f {{ f }} {% endfor %}--env-file {{ env_file }} up -d {{ up_args }}"
+        chdir: "{{ app_dir }}"
+
+- name: Applications
+  hosts: app
+  vars_files: [secrets.yml]
+  tasks:
+    - name: vm.max_map_count pour SonarQube (staging)
+      become: true
+      ansible.posix.sysctl:
+        name: vm.max_map_count
+        value: "262144"
+        sysctl_set: true
+        state: present
+      when: env_name == "staging"
+    - name: Attendre PostgreSQL (port 5432)
+      ansible.builtin.wait_for:
+        host: "{{ ips[db_host] }}"
+        port: 5432
+        timeout: 120
+    - name: Cloner le dépôt (jeton de déploiement)
+      no_log: true
+      ansible.builtin.git:
+        repo: "https://{{ gitlab_user | urlencode }}:{{ gitlab_token | urlencode }}@{{ app_repo }}"
+        dest: "{{ app_dir }}"
+        version: "{{ app_branch }}"
+    - name: Générer le fichier .env
+      no_log: true
+      ansible.builtin.template:
+        src: "{{ env_template }}"
+        dest: "{{ app_dir }}/{{ env_file }}"
+        mode: "0600"
+    - name: Lancer les containers
+      become: true
+      ansible.builtin.command:
+        cmd: "docker compose --project-directory . {% for f in compose_files %}-f {{ f }} {% endfor %}--env-file {{ env_file }} up -d {{ up_args }}"
+        chdir: "{{ app_dir }}"

@@ -1,0 +1,8 @@
+env_name: prod
+compose_files: [docker-compose.yml, infrastructure/docker-compose.prod.yml]
+env_template: env.prod.j2
+env_file: infrastructure/.env.prod
+up_args: "--build"
+db_host: vm-prod-db
+db_password: "{{ vault_db_password_prod }}"
+app_key: "{{ vault_app_key_prod }}"

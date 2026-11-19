@@ -1,0 +1,7 @@
+env_name: prod
+compose_files: [infrastructure/docker-compose.db.yml]
+env_template: env.db.j2
+env_file: infrastructure/.env.db
+up_args: ""
+db_name: intelliops_prod
+db_password: "{{ vault_db_password_prod }}"
