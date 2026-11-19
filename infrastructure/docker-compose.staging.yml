@@ -84,21 +84,29 @@ services:
     networks:
       - reseau_app
 
+    
   owasp-zap:
     image: ghcr.io/zaproxy/zaproxy:${ZAP_VERSION:?ZAP_VERSION manquant dans .env.staging}
     container_name: intelliops_zap
     restart: on-failure
-    command: >
-      zap.sh -daemon -host 0.0.0.0 -port 8090
-      -config api.key=${ZAP_API_KEY:?ZAP_API_KEY manquant dans .env.staging}
-      -config api.addrs.addr.name=.*
-      -config api.addrs.addr.regex=true
+    command: ["zap-webswing.sh"]
+    environment:
+      ZAP_WEBSWING_OPTS: >-
+        -host 0.0.0.0
+        -port 8090
+        -config api.key=${ZAP_API_KEY:?ZAP_API_KEY manquant dans .env.staging}
+        -config api.addrs.addr.name=.*
+        -config api.addrs.addr.regex=true
     ports:
-      - "${MONITORING_BIND_IP:-127.0.0.1}:8090:8090"
+      # Interface graphique Webswing
+      - "${MONITORING_BIND_IP:-127.0.0.1}:8090:8080"
+      # API et proxy ZAP
+      - "${MONITORING_BIND_IP:-127.0.0.1}:8091:8090"
     depends_on:
       - frontend
     networks:
       - reseau_app
+
 
   prometheus:
     image: prom/prometheus:${PROMETHEUS_VERSION:?PROMETHEUS_VERSION manquant dans .env.staging}
