@@ -46,7 +46,7 @@ services:
     container_name: intelliops_prometheus_prod
     restart: always
     ports:
-      - "127.0.0.1:9090:9090"
+      - "${MONITORING_BIND_IP:-127.0.0.1}:9090:9090"
     volumes:
       - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_prod_data:/prometheus
@@ -63,7 +63,7 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD manquant dans .env.prod}
     ports:
-      - "127.0.0.1:3000:3000"
+      - "${MONITORING_BIND_IP:-127.0.0.1}:3000:3000"
     volumes:
       - grafana_prod_data:/var/lib/grafana
     networks:
