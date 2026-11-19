@@ -4,10 +4,12 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 ARG VITE_API_URL
+ARG VITE_KEYCLOAK_URL
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_KEYCLOAK_URL=$VITE_KEYCLOAK_URL
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:alpine AS production
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
