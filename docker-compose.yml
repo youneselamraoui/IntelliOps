@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: intelliops_backend
+    networks:
+      - reseau_app
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: intelliops_frontend
+    networks:
+      - reseau_app
+
+networks:
+  reseau_app:
+    driver: bridge

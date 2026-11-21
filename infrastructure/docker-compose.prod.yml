@@ -1,0 +1,74 @@
+services:
+  backend:
+    build:
+      target: production
+    restart: always
+    env_file:
+      - ./infrastructure/.env.prod
+    # php-fpm (9000) n'est joignable que par le nginx du frontend, via reseau_app
+    expose:
+      - "9000"
+
+  frontend:
+    build:
+      target: production
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api}
+        VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL:?VITE_KEYCLOAK_URL manquant dans .env.prod}
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:?KEYCLOAK_VERSION manquant dans .env.prod}
+    container_name: intelliops_keycloak_prod
+    restart: always
+    command: start
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?KEYCLOAK_ADMIN_PASSWORD manquant dans .env.prod}
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: ${KC_HOSTNAME:?KC_HOSTNAME manquant dans .env.prod}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://${DB_HOST:?DB_HOST manquant dans .env.prod}:${DB_PORT:-5432}/${KC_DB_NAME:-keycloak}
+      KC_DB_USERNAME: ${DB_USERNAME:?DB_USERNAME manquant dans .env.prod}
+      KC_DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD manquant dans .env.prod}
+    ports:
+      # Remplace IP_VMNET_OU_LAN par l'IP voulue (ufw ne filtre pas les ports Docker)
+      - "${MONITORING_BIND_IP:-127.0.0.1}:8082:8080"
+    networks:
+      - reseau_app
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:?PROMETHEUS_VERSION manquant dans .env.prod}
+    container_name: intelliops_prometheus_prod
+    restart: always
+    ports:
+      - "${MONITORING_BIND_IP:-127.0.0.1}:9090:9090"
+    volumes:
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_prod_data:/prometheus
+    networks:
+      - reseau_app
+
+  grafana:
+    image: grafana/grafana:${GRAFANA_VERSION:?GRAFANA_VERSION manquant dans .env.prod}
+    container_name: intelliops_grafana_prod
+    restart: always
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD manquant dans .env.prod}
+    ports:
+      - "${MONITORING_BIND_IP:-127.0.0.1}:3000:3000"
+    volumes:
+      - grafana_prod_data:/var/lib/grafana
+    networks:
+      - reseau_app
+
+volumes:
+  prometheus_prod_data:
+  grafana_prod_data:

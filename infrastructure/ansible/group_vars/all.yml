@@ -5,3 +5,26 @@ ips:
   vm-prod: 192.168.50.11
   vm-staging-db: 192.168.50.12
   vm-prod-db: 192.168.50.13
+
+# --- Dépôt GitLab (sans https://) ---
+app_repo: "gitlab.com/equipe-younes/intelliops.git"
+app_branch: main
+app_dir: "/home/younes/app"
+
+# --- Valeurs communes ---
+db_user: intelliops
+pgadmin_email: admin@intelliops.ma
+keycloak_admin_password: "{{ vault_keycloak_admin_password }}"
+grafana_admin_password: "{{ vault_grafana_admin_password }}"
+zap_api_key: "{{ vault_zap_api_key }}"
+pgadmin_password: "{{ vault_pgadmin_password }}"
+
+# --- Versions des images (à vérifier au premier téléchargement) ---
+keycloak_version: "26.8.1"
+jenkins_version: "2.580.2-lts-jdk21"
+sonarqube_version: "26.10.0.133078-community"
+trivy_version: "0.76.1"
+zap_version: "2.17.0"
+prometheus_version: "v3.14.0"
+grafana_version: "13.3.1"
+pgadmin_version: "9.17"
