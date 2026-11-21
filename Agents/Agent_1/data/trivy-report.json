@@ -1,0 +1,19 @@
+{
+  "ArtifactName": "backend:latest",
+  "ArtifactType": "container_image",
+  "Results": [
+    {
+      "Target": "backend:latest",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2025-1234",
+          "PkgName": "openssl",
+          "InstalledVersion": "3.0.2",
+          "FixedVersion": "3.0.5",
+          "Severity": "HIGH",
+          "Title": "OpenSSL vulnerability"
+        }
+      ]
+    }
+  ]
+}

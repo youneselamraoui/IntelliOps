@@ -1,24 +1,41 @@
 
+import os
+import requests
 from collectors.gitlab_collector import GitLabCollector
+from collectors.trivy_collector import TrivyCollector
 from normalizers.gitlab_normalizer import GitLabNormalizer
+from normalizers.trivy_normalizer import TrivyNormalizer
 from state.pipeline_state import PipelineState
-
-
+from state.trivy_state import TrivyState
 class ExtractionService:
 
     def __init__(self):
+        # Composants GitLab
         self.collector = GitLabCollector()
         self.normalizer = GitLabNormalizer()
         self.state = PipelineState()
 
+        # Composants Trivy
+        self.trivy_collector = TrivyCollector()
+        self.trivy_normalizer = TrivyNormalizer()
+        self.trivy_state = TrivyState()
+
     def extract(self):
+        # Liste commune pour toutes les sources
+        events = []
+        # Extraction GitLab
+        gitlab_events = self.extract_gitlab()
+        events.extend(gitlab_events)
+        # Extraction Trivy
+        trivy_events = self.extract_trivy()
+        events.extend(trivy_events)
+        return events
+
+    def extract_gitlab(self):
 
         pipelines = self.collector.collect()
-
         events = []
-
         for pipeline in pipelines:
-
             project_id = self.collector.project_id
             pipeline_id = pipeline["id"]
             pipeline_status = pipeline["status"]
@@ -29,11 +46,7 @@ class ExtractionService:
                 pipeline_status
             ):
                 continue
-
-            # Le normalizer retourne une liste d'événements
             normalized_events = self.normalizer.normalize(pipeline)
-
-            # Ajouter tous les événements à la liste principale
             events.extend(normalized_events)
 
             self.state.mark_as_processed(
@@ -42,4 +55,114 @@ class ExtractionService:
                 pipeline_status
             )
 
+        return events
+    
+    def extract_trivy(self):
+        # 1. Récupérer la configuration depuis .env    
+        project_id = os.getenv("TRIVY_GITLAB_PROJECT_ID")
+    
+        artifact_path = os.getenv(
+            "TRIVY_GITLAB_ARTIFACT_PATH",
+            "trivy-report.json"
+        )
+    
+        environment = os.getenv("TRIVY_ENVIRONMENT", "unknown")
+    
+        if not project_id:
+            raise ValueError("Trivy GitLab project ID is missing")
+    
+        # 2. Récupérer le watermark et les jobs en attente
+    
+        last_seen_job_id = self.trivy_state.get_last_seen_job_id(
+            project_id
+        )
+        pending_job_ids = self.trivy_state.get_pending_jobs(
+            project_id
+        )
+    
+        # 3. Découvrir les nouveaux jobs Trivy    
+        ready_jobs, still_pending, max_seen_job_id = (
+            self.trivy_collector.discover_gitlab_jobs(
+                project_id=project_id,
+                last_seen_job_id=last_seen_job_id,
+                pending_job_ids=pending_job_ids
+            )
+        )
+        # 4. Identifier les jobs qui doivent encore être suivis
+
+        ready_job_ids = {
+            str(job["id"])
+            for job in ready_jobs
+        }
+        
+        active_job_ids = set(still_pending) | ready_job_ids
+        
+        # 5. Retirer les anciens jobs qui sont maintenant terminés
+        # sans rapport exploitable
+        
+        for job_id in pending_job_ids:
+        
+            if str(job_id) not in active_job_ids:
+        
+                self.trivy_state.remove_pending(
+                    project_id,
+                    job_id
+                )
+    
+        # 4. Sauvegarder tous les jobs qui doivent être suivis
+    
+        for job_id in still_pending:
+            self.trivy_state.add_pending(project_id, job_id)
+    
+        for job in ready_jobs:
+            self.trivy_state.add_pending(project_id, job["id"])
+    
+        # 5. Mettre à jour le watermark
+        self.trivy_state.update_watermark(
+            project_id,
+            max_seen_job_id
+        )
+        # 6. Télécharger et normaliser les rapports disponibles    
+        events = []
+    
+        for job in ready_jobs:
+    
+            job_id = str(job["id"])
+            # Éviter de retraiter un job déjà traité    
+            if self.trivy_state.is_processed(project_id, job_id):
+
+                self.trivy_state.remove_pending(
+                    project_id,
+                    job_id
+                )
+            
+                continue
+            try:
+                # Récupérer le rapport Trivy
+    
+                report = self.trivy_collector.collect_from_gitlab(
+                    project_id=project_id,
+                    job_id=job_id,
+                    artifact_path=artifact_path
+                )
+    
+                # Transformer le rapport en événements
+                normalized_events = self.trivy_normalizer.normalize(
+                    report,
+                    environment=environment
+                )
+                events.extend(normalized_events)
+                # Marquer le job comme traité uniquement après succès
+    
+                self.trivy_state.mark_as_processed(
+                    project_id,
+                    job_id
+                )
+            except requests.exceptions.RequestException as error:
+                # Le job reste en attente pour une prochaine tentative
+    
+                print(
+                    f"Unable to download Trivy report for job {job_id}: {error}"
+                )
+    
         return events
