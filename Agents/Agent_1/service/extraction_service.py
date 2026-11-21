@@ -29,6 +29,13 @@ class ExtractionService:
         # Extraction Trivy
         trivy_events = self.extract_trivy()
         events.extend(trivy_events)
+        
+        file_events = self.extract_trivy_file()
+        events.extend(file_events)
+        
+        docker_events = self.extract_trivy_docker()
+        events.extend(docker_events)
+
         return events
 
     def extract_gitlab(self):
@@ -166,3 +173,88 @@ class ExtractionService:
                 )
     
         return events
+    
+    
+    
+    def extract_trivy_file(self):
+        file_path = os.getenv("TRIVY_REPORT_PATH")
+        environment = os.getenv("TRIVY_ENVIRONMENT", "unknown")
+    
+        if not file_path:
+            return []
+    
+        try:
+            report = self.trivy_collector.collect(
+                source="file",
+                file_path=file_path
+            )
+    
+            events = self.trivy_normalizer.normalize(
+                report,
+                environment=environment
+            )
+    
+            return events
+    
+        except (FileNotFoundError, ValueError, OSError) as error:
+            print(f"Unable to process local Trivy report: {error}")
+            return []
+    
+    
+    def extract_trivy_docker(self):
+        environment = os.getenv("TRIVY_ENVIRONMENT", "unknown")
+        events = []
+    
+        try:
+            images = self.trivy_collector.discover_docker_images()
+    
+        except (RuntimeError, OSError) as error:
+            print(f"Unable to discover Docker images: {error}")
+            return []
+    
+        for image in images:
+            repository = image.get("Repository")
+            tag = image.get("Tag")
+            image_id = image.get("ID")
+    
+            # Ignorer les images sans nom ou sans tag
+            if not repository or not tag:
+                continue
+    
+            if repository == "<none>" or tag == "<none>":
+                continue
+    
+            image_name = f"{repository}:{tag}"
+            
+            if self.trivy_state.is_image_processed(image_name, image_id):
+                print(f"Skipping already processed image: {image_name}")
+                continue
+    
+            try:
+                report = self.trivy_collector.collect(
+                    source="docker",
+                    image_name=image_name,
+                    image_source="docker"
+                )
+    
+                image_events = self.trivy_normalizer.normalize(
+                    report,
+                    environment=environment
+                )
+    
+                events.extend(image_events)
+                
+                self.trivy_state.mark_image_as_processed(
+                    image_name,
+                    image_id
+                )
+                print(f"Successfully scanned image: {image_name}")
+    
+            except (RuntimeError, ValueError, OSError) as error:
+                print(
+                    f"Unable to scan Docker image {image_name}: {error}"
+                )
+                continue
+    
+        return events
+    

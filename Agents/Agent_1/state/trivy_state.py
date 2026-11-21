@@ -14,6 +14,7 @@ class TrivyState:
         )
 
         self.projects = {}
+        self.docker_images = {}
 
         self.load_state()
 
@@ -30,11 +31,13 @@ class TrivyState:
             data = json.load(file)
 
         self.projects = data.get("projects", {})
+        self.docker_images = data.get("docker_images", {})
 
     def save_state(self):
 
         data = {
-            "projects": self.projects
+            "projects": self.projects,
+            "docker_images": self.docker_images
         }
 
         with open(self.file_path, "w", encoding="utf-8") as file:
@@ -125,3 +128,34 @@ class TrivyState:
         ]
 
         self.save_state()
+        
+    
+    def is_image_processed(self, image_name, image_id):
+        image_state = self.docker_images.get(image_name)
+    
+        if not image_state:
+            return False
+    
+        return (
+            image_state.get("image_id") == image_id
+            and image_state.get("processed") is True
+        )
+    
+    
+    def mark_image_as_processed(self, image_name, image_id):
+        self.docker_images[image_name] = {
+            "image_id": image_id,
+            "processed": True
+        }
+    
+        self.save_state()
+    
+    
+    def get_image_id(self, image_name):
+        image_state = self.docker_images.get(image_name)
+    
+        if not image_state:
+            return None
+    
+        return image_state.get("image_id")
+    

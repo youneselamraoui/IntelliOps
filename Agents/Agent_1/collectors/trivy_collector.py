@@ -1,4 +1,4 @@
-import os
+import os , io
 import zipfile
 import json
 import requests
@@ -65,18 +65,40 @@ class TrivyCollector(BaseCollector) :
         return report
     
     
-    def collect_from_docker(self, image_name):
-
+    
+    def collect_from_docker(self, image_name, image_source="auto"):
+        if image_source not in ("auto", "docker", "remote"):
+            raise ValueError(
+                "image_source must be 'auto', 'docker' or 'remote'"
+            )
+    
+        
         command = [
-            "docker", "run", "--rm",
+            "docker", "run", "--rm"
+        ]
+        
+        if image_source == "docker":
+            command.extend([
+                "-v",
+                "/var/run/docker.sock:/var/run/docker.sock"
+            ])
+        
+        command.extend([
             "aquasec/trivy:latest",
             "image",
-            "--image-src", "remote",
             "--scanners", "vuln",
             "--format", "json",
-            image_name
-        ]
+        ])
+        
+        if image_source == "docker":
+            command.extend(["--image-src", "docker"])
+        
+        elif image_source == "remote":
+            command.extend(["--image-src", "remote"])
+        
+        command.append(image_name)
 
+    
         try:
             result = subprocess.run(
                 command,
@@ -84,34 +106,81 @@ class TrivyCollector(BaseCollector) :
                 text=True,
                 timeout=600
             )
-
+    
         except FileNotFoundError:
             raise RuntimeError(
                 "Docker is not installed or is not available in PATH"
             )
-
+    
         except subprocess.TimeoutExpired:
-            raise RuntimeError(
-                "Trivy scan timed out"
-            )
-
+            raise RuntimeError("Trivy scan timed out")
+    
         if result.returncode != 0:
             raise RuntimeError(
                 f"Trivy Docker scan failed: {result.stderr}"
             )
-
+    
         try:
             report = json.loads(result.stdout)
-
+    
         except json.JSONDecodeError as error:
             raise ValueError(
                 f"Trivy returned invalid JSON: {error}"
             )
-
+    
+        if not isinstance(report, dict):
+            raise ValueError("Invalid Trivy report format")
+    
         return report
     
     
+    def discover_docker_images(self):
+        command = [
+            "docker",
+            "images",
+            "--format",
+            "{{json .}}"
+        ]
     
+        try:
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                timeout=60,
+                check=True
+            )
+    
+        except FileNotFoundError:
+            raise RuntimeError(
+                "Docker is not installed or not available in PATH"
+            )
+    
+        except subprocess.CalledProcessError as error:
+            raise RuntimeError(
+                f"Unable to discover Docker images: {error.stderr}"
+            )
+    
+        except subprocess.TimeoutExpired:
+            raise RuntimeError(
+                "Docker image discovery timed out"
+            )
+    
+        images = []
+    
+        for line in result.stdout.splitlines():
+            if not line.strip():
+                continue
+    
+            try:
+                image = json.loads(line)
+                images.append(image)
+    
+            except json.JSONDecodeError:
+                continue
+    
+        return images    
+        
     def collect_from_gitlab(
         self,
         project_id,
