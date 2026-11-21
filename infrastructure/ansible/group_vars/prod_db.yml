@@ -5,3 +5,4 @@ env_file: infrastructure/.env.db
 up_args: ""
 db_name: intelliops_prod
 db_password: "{{ vault_db_password_prod }}"
+pgadmin_password: "{{ vault_pgadmin_password_prod }}"

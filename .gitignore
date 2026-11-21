@@ -51,4 +51,5 @@ Thumbs.db
 .env.*
 !.env.*.example
 backups/
-reports/
+reports/infrastructure/ansible/secrets.yml
+infrastructure/ansible/secrets.yml.bak

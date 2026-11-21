@@ -6,3 +6,5 @@ up_args: "--build"
 db_host: vm-prod-db
 db_password: "{{ vault_db_password_prod }}"
 app_key: "{{ vault_app_key_prod }}"
+keycloak_admin_password: "{{ vault_keycloak_admin_password_prod }}"
+grafana_admin_password: "{{ vault_grafana_admin_password_prod }}"

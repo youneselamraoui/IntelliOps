@@ -1,19 +1,67 @@
-- name: Docker + Compose + git
+- name: Docker + Compose + git + réseau fiable
   hosts: app:db
   become: true
   tasks:
+    - name: Désactiver l'IPv6 (le NAT VMware n'en fournit pas)
+      ansible.posix.sysctl:
+        name: "{{ item }}"
+        value: "1"
+        sysctl_set: true
+        state: present
+        reload: true
+      loop:
+        - net.ipv6.conf.all.disable_ipv6
+        - net.ipv6.conf.default.disable_ipv6
+
+    - name: Dossier de configuration de systemd-resolved
+      ansible.builtin.file:
+        path: /etc/systemd/resolved.conf.d
+        state: directory
+        mode: "0755"
+
+    - name: DNS fiables pour la VM
+      ansible.builtin.copy:
+        dest: /etc/systemd/resolved.conf.d/dns.conf
+        content: |
+          [Resolve]
+          DNS=1.1.1.1 8.8.8.8
+          FallbackDNS=9.9.9.9
+          Domains=~.
+        mode: "0644"
+      notify: Redémarrer systemd-resolved
+
     - name: Paquets
       ansible.builtin.apt:
         name: [docker.io, docker-compose-v2, git]
         update_cache: true
         state: present
+
+    - name: DNS fiables pour les conteneurs
+      ansible.builtin.copy:
+        dest: /etc/docker/daemon.json
+        content: |
+          {"dns": ["1.1.1.1", "8.8.8.8"]}
+        mode: "0644"
+      notify: Redémarrer docker
+
     - name: Docker actif au démarrage
       ansible.builtin.service:
         name: docker
         state: started
         enabled: true
+
     - name: younes dans le groupe docker
       ansible.builtin.user:
         name: younes
         groups: docker
         append: true
+
+  handlers:
+    - name: Redémarrer systemd-resolved
+      ansible.builtin.service:
+        name: systemd-resolved
+        state: restarted
+    - name: Redémarrer docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted

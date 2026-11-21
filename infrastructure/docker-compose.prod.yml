@@ -37,7 +37,7 @@ services:
       KC_DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD manquant dans .env.prod}
     ports:
       # Remplace IP_VMNET_OU_LAN par l'IP voulue (ufw ne filtre pas les ports Docker)
-      - "8082:8080"
+      - "${MONITORING_BIND_IP:-127.0.0.1}:8082:8080"
     networks:
       - reseau_app
 
