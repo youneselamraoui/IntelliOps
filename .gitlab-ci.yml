@@ -66,7 +66,7 @@ default:
     # chaque commande qui échoue fait échouer le job
     - docker exec backend php artisan --version
     - docker exec backend php-fpm -t
-    - docker exec frontend wget -q -O /dev/null http://localhost/
+    - docker exec frontend wget -q -O /dev/null http://127.0.0.1/
   after_script:
     - docker logs backend > backend.log 2>&1 || true
     - docker logs frontend > frontend.log 2>&1 || true
