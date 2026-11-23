@@ -9,6 +9,115 @@
                 "18206263319",
                 "18238574862"
             ]
+        },
+        "89289660": {
+            "last_seen_job_id": 0,
+            "pending_jobs": [],
+            "processed_jobs": []
+        }
+    },
+    "docker_images": {
+        "nginx:alpine": {
+            "image_id": "dc48b7a872a7",
+            "processed": true
+        },
+        "ministatus:local": {
+            "image_id": "dea933552ec7",
+            "processed": true
+        },
+        "ministatus:multistage": {
+            "image_id": "e8a55afae43e",
+            "processed": true
+        },
+        "ministatus:standard": {
+            "image_id": "80e9d2238fab",
+            "processed": true
+        },
+        "ministatus:1.0.1": {
+            "image_id": "bf5b0f7cd3ea",
+            "processed": true
+        },
+        "nabil06/ministatus:1.0.0": {
+            "image_id": "b3df629c7214",
+            "processed": true
+        },
+        "ministatus:1.0": {
+            "image_id": "ca19cc239bf7",
+            "processed": true
+        },
+        "ministatus:latest": {
+            "image_id": "ca19cc239bf7",
+            "processed": true
+        },
+        "ministatus:dev": {
+            "image_id": "3001c04286be",
+            "processed": true
+        },
+        "backend-backend:latest": {
+            "image_id": "54a6a6243a2c",
+            "processed": true
+        },
+        "frontend:latest": {
+            "image_id": "fe237b4eb7c3",
+            "processed": true
+        },
+        "postgres:15-alpine": {
+            "image_id": "df7bca0066e6",
+            "processed": true
+        },
+        "postgres:15": {
+            "image_id": "67dc02dae6e2",
+            "processed": true
+        },
+        "backtest:latest": {
+            "image_id": "2ab8ff4c1c72",
+            "processed": true
+        },
+        "aquasec/trivy:latest": {
+            "image_id": "be1190afcb28",
+            "processed": true
+        },
+        "prom/node-exporter:latest": {
+            "image_id": "e9cff4fc67b1",
+            "processed": true
+        },
+        "postgres:16": {
+            "image_id": "33f923b05f64",
+            "processed": true
+        },
+        "taskflow-nginx:1.0.0": {
+            "image_id": "sha256:4ae5b98c7bb5fdf4f03eb6ddb468d1a9813fe8781231483abaa9c93046c6544f",
+            "processed": true
+        },
+        "taskflow-backend:1.0.0": {
+            "image_id": "sha256:020a0cf02990fa426d6c29dd1f0e99348117e3b8c7078fc18d976a26d315c093",
+            "processed": true
+        },
+        "postgres:16-alpine": {
+            "image_id": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+            "processed": true
+        },
+        "taskflow-frontend:1.0.0": {
+            "image_id": "sha256:251a542f4885787bf471d5a74cb29e822dcc85b46966757d0541e3df8a2ae7b9",
+            "processed": true
+        }
+    },
+    "registry_images": {
+        "default:89289660:registry.gitlab.com/nabilaitdriss09/test-trivy/frontend:1.0.0": {
+            "digest": "sha256:251a542f4885787bf471d5a74cb29e822dcc85b46966757d0541e3df8a2ae7b9",
+            "processed": true
+        },
+        "default:nabil06/ministatus:nabil06/ministatus:latest": {
+            "digest": "sha256:b3df629c7214512b84e6af4714daa697065190ccd27e18bf1a9120409ca09170",
+            "processed": true
+        },
+        "default:nabil06/ministatus:nabil06/ministatus:1.0": {
+            "digest": "sha256:b3df629c7214512b84e6af4714daa697065190ccd27e18bf1a9120409ca09170",
+            "processed": true
+        },
+        "default:nabil06/ministatus:nabil06/ministatus:1.0.0": {
+            "digest": "sha256:b3df629c7214512b84e6af4714daa697065190ccd27e18bf1a9120409ca09170",
+            "processed": true
         }
     }
 }

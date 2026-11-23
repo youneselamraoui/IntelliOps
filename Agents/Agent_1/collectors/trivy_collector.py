@@ -66,45 +66,69 @@ class TrivyCollector(BaseCollector) :
     
     
     
-    def collect_from_docker(self, image_name, image_source="auto"):
+    
+    def collect_from_docker(self,image_name,
+                            image_source="auto",
+                            registry_username=None,
+                            registry_password=None ):
         if image_source not in ("auto", "docker", "remote"):
             raise ValueError(
                 "image_source must be 'auto', 'docker' or 'remote'"
             )
     
+        # Construction de la commande Docker
+        command = ["docker", "run", "--rm"]
+        # Transmettre les identifiants au conteneur Trivy
+        scan_env = os.environ.copy()
         
-        command = [
-            "docker", "run", "--rm"
-        ]
+        if registry_username and registry_password:
+            scan_env["TRIVY_USERNAME"] = registry_username
+            scan_env["TRIVY_PASSWORD"] = registry_password
         
+            command.extend([
+                "-e", "TRIVY_USERNAME",
+                "-e", "TRIVY_PASSWORD"
+            ])
+    
+        # Accès aux images Docker locales
         if image_source == "docker":
             command.extend([
                 "-v",
                 "/var/run/docker.sock:/var/run/docker.sock"
             ])
-        
+    
+        # Cache persistant de Trivy
+        command.extend([
+            "-v",
+            "trivy-cache:/root/.cache/"
+        ])
+    
+        # Image contenant Trivy et ses options
         command.extend([
             "aquasec/trivy:latest",
+            "--timeout", "10m",
             "image",
             "--scanners", "vuln",
             "--format", "json",
         ])
-        
+    
         if image_source == "docker":
             command.extend(["--image-src", "docker"])
-        
+    
         elif image_source == "remote":
             command.extend(["--image-src", "remote"])
-        
+    
         command.append(image_name)
-
     
         try:
             result = subprocess.run(
                 command,
                 capture_output=True,
                 text=True,
-                timeout=600
+                encoding="utf-8",
+                errors="replace",
+                timeout=720,
+                env=scan_env
             )
     
         except FileNotFoundError:
@@ -132,12 +156,64 @@ class TrivyCollector(BaseCollector) :
             raise ValueError("Invalid Trivy report format")
     
         return report
+
     
     
-    def discover_docker_images(self):
+    # def discover_docker_images(self):
+    #     command = [
+    #         "docker",
+    #         "images",
+    #         "--format",
+    #         "{{json .}}"
+    #     ]
+    
+    #     try:
+    #         result = subprocess.run(
+    #             command,
+    #             capture_output=True,
+    #             text=True,
+    #             timeout=60,
+    #             check=True
+    #         )
+    
+    #     except FileNotFoundError:
+    #         raise RuntimeError(
+    #             "Docker is not installed or not available in PATH"
+    #         )
+    
+    #     except subprocess.CalledProcessError as error:
+    #         raise RuntimeError(
+    #             f"Unable to discover Docker images: {error.stderr}"
+    #         )
+    
+    #     except subprocess.TimeoutExpired:
+    #         raise RuntimeError(
+    #             "Docker image discovery timed out"
+    #         )
+    
+    #     images = []
+    
+    #     for line in result.stdout.splitlines():
+    #         if not line.strip():
+    #             continue
+    
+    #         try:
+    #             image = json.loads(line)
+    #             images.append(image)
+    
+    #         except json.JSONDecodeError:
+    #             continue
+    
+    #     return images  
+    
+    
+    
+    def discover_running_containers(self, project_name):
         command = [
             "docker",
-            "images",
+            "ps",
+            "--filter",
+            f"label=com.docker.compose.project={project_name}",
             "--format",
             "{{json .}}"
         ]
@@ -147,6 +223,8 @@ class TrivyCollector(BaseCollector) :
                 command,
                 capture_output=True,
                 text=True,
+                encoding="utf-8",
+                errors="replace",
                 timeout=60,
                 check=True
             )
@@ -158,28 +236,57 @@ class TrivyCollector(BaseCollector) :
     
         except subprocess.CalledProcessError as error:
             raise RuntimeError(
-                f"Unable to discover Docker images: {error.stderr}"
+                f"Unable to discover running containers: {error.stderr}"
             )
     
         except subprocess.TimeoutExpired:
             raise RuntimeError(
-                "Docker image discovery timed out"
+                "Docker container discovery timed out"
             )
     
-        images = []
+        containers = []
     
         for line in result.stdout.splitlines():
             if not line.strip():
                 continue
     
             try:
-                image = json.loads(line)
-                images.append(image)
+                container = json.loads(line)
     
-            except json.JSONDecodeError:
+                inspect_result = subprocess.run(
+                    ["docker","inspect",container["ID"]],
+                    capture_output=True,
+                    text=True,
+                    encoding="utf-8",
+                    errors="replace",
+                    timeout=30,
+                    check=True
+                )
+                inspect_data = json.loads(inspect_result.stdout)[0]
+                
+                container["ImageID"] = inspect_data.get("Image")
+                container["Labels"] = (
+                    inspect_data.get("Config", {}).get("Labels") or {}
+                )
+    
+                if container.get("Image") and container["ImageID"]:
+                    containers.append(container)
+    
+            except (json.JSONDecodeError, KeyError ,IndexError):
                 continue
     
-        return images    
+            except subprocess.CalledProcessError as error:
+                print(
+                    f"Unable to inspect container: {error.stderr}"
+                )
+                continue
+            except subprocess.TimeoutExpired:
+                print(f"Timeout while inspecting container: {container.get('ID', 'unknown')}")
+                continue
+    
+        return containers
+
+  
         
     def collect_from_gitlab(
         self,

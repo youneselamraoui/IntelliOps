@@ -1,5 +1,7 @@
 
 import os
+from collectors.gitlab_registry_collector import GitLabRegistryCollector
+from collectors.dockerhub_collector import DockerHubCollector
 import requests
 from collectors.gitlab_collector import GitLabCollector
 from collectors.trivy_collector import TrivyCollector
@@ -7,6 +9,7 @@ from normalizers.gitlab_normalizer import GitLabNormalizer
 from normalizers.trivy_normalizer import TrivyNormalizer
 from state.pipeline_state import PipelineState
 from state.trivy_state import TrivyState
+from docker_config import get_docker_config
 class ExtractionService:
 
     def __init__(self):
@@ -19,6 +22,7 @@ class ExtractionService:
         self.trivy_collector = TrivyCollector()
         self.trivy_normalizer = TrivyNormalizer()
         self.trivy_state = TrivyState()
+        self.docker_config = get_docker_config()
 
     def extract(self):
         # Liste commune pour toutes les sources
@@ -200,61 +204,270 @@ class ExtractionService:
             print(f"Unable to process local Trivy report: {error}")
             return []
     
+
+#je vais savoir si je le laisse :
+
     
-    def extract_trivy_docker(self):
+
+    def extract_trivy_docker_local(self):
         environment = os.getenv("TRIVY_ENVIRONMENT", "unknown")
+        project_name = os.getenv("TRIVY_DOCKER_COMPOSE_PROJECT")
+    
         events = []
     
-        try:
-            images = self.trivy_collector.discover_docker_images()
-    
-        except (RuntimeError, OSError) as error:
-            print(f"Unable to discover Docker images: {error}")
+        if not project_name:
+            print("Docker Compose project is not configured.")
             return []
     
-        for image in images:
-            repository = image.get("Repository")
-            tag = image.get("Tag")
-            image_id = image.get("ID")
+        # 1. Découvrir les conteneurs actifs
+        try:
+            containers = self.trivy_collector.discover_running_containers(project_name)
     
-            # Ignorer les images sans nom ou sans tag
-            if not repository or not tag:
+        except (RuntimeError, OSError) as error:
+            print(f"Unable to discover running containers: {error}")
+            return []
+    
+        # 2. Filtrer les conteneurs appartenant au projet ciblé
+        project_containers = []
+    
+        for container in containers:
+            labels = container.get("Labels") or {}
+    
+            if labels.get("com.docker.compose.project") == project_name:
+                project_containers.append(container)
+    
+        print(
+            f"Found {len(project_containers)} running containers "
+            f"for project: {project_name}"
+        )
+    
+        # 3. Regrouper les conteneurs par identifiant réel d'image
+        images = {}
+    
+        for container in project_containers:
+            image_name = container.get("Image")
+            image_id = container.get("ImageID")
+    
+            if not image_name or not image_id:
                 continue
     
-            if repository == "<none>" or tag == "<none>":
-                continue
+            if image_id not in images:
+                images[image_id] = {
+                    "image_name": image_name,
+                    "aliases": set()
+                }
     
-            image_name = f"{repository}:{tag}"
-            
-            if self.trivy_state.is_image_processed(image_name, image_id):
+            images[image_id]["aliases"].add(image_name)
+    
+        # 4. Scanner chaque image unique
+        for image_id, image_data in images.items():
+            image_name = image_data["image_name"]
+            aliases = image_data["aliases"]
+    
+            # Vérifier si cette image a déjà été analysée
+            if all(
+                self.trivy_state.is_image_processed(name, image_id)
+                for name in aliases
+            ):
                 print(f"Skipping already processed image: {image_name}")
                 continue
     
             try:
+                # Scanner l'image
                 report = self.trivy_collector.collect(
                     source="docker",
                     image_name=image_name,
                     image_source="docker"
                 )
     
+                # Normaliser le rapport
                 image_events = self.trivy_normalizer.normalize(
                     report,
                     environment=environment
                 )
     
                 events.extend(image_events)
-                
-                self.trivy_state.mark_image_as_processed(
-                    image_name,
-                    image_id
-                )
+    
+                # Enregistrer l'image après le succès du scan
+                for name in aliases:
+                    self.trivy_state.mark_image_as_processed(
+                        name,
+                        image_id
+                    )
+    
                 print(f"Successfully scanned image: {image_name}")
     
             except (RuntimeError, ValueError, OSError) as error:
                 print(
                     f"Unable to scan Docker image {image_name}: {error}"
                 )
-                continue
+    
+        return events
+    def extract_trivy_docker(self):
+        connection_type = self.docker_config["connection_type"]
+    
+        if connection_type == "local":
+            return self.extract_trivy_docker_local()
+    
+        elif connection_type == "registry":
+            return self.extract_trivy_registry()
+        
+        elif connection_type == "dockerhub":
+            return self.extract_trivy_dockerhub()
+    
+        elif connection_type == "remote":
+            print("Remote Docker scanning is not implemented yet.")
+            return []
+        
+        
+    def extract_trivy_registry(self):
+        environment = os.getenv("TRIVY_ENVIRONMENT", "unknown")
+        client_id = self.docker_config["client_id"]
+        project_id = self.docker_config["registry_project_id"]
+        events = []
+    
+        try:
+            # 1. Découvrir les images du Registry GitLab
+            registry_collector = GitLabRegistryCollector(
+                gitlab_url=self.docker_config["gitlab_url"],
+                token=self.docker_config["gitlab_token"],
+                project_id=self.docker_config["registry_project_id"]
+            )
+    
+            images = registry_collector.discover_images_with_details()
+    
+            print(f"Found {len(images)} images in GitLab Registry")
+    
+            # 2. Afficher les images découvertes
+            # Scanner chaque image découverte
+            for image_info in images:
+                image = image_info["location"]
+                digest = image_info["digest"]
+            
+                print(f"Image : {image}")
+                print(f"Digest : {digest}")
+                
+                if self.trivy_state.is_registry_image_processed(
+                    client_id, project_id, image, digest
+                ):
+                    print(f"Skipping already processed Registry image: {image}")
+                    continue
+            
+                print(f"\nScanning Registry image: {image}")
+            
+                try:
+                    # 1. Scanner l'image privée avec Trivy
+                    report = self.trivy_collector.collect(
+                        source="docker",
+                        image_name=image,
+                        image_source="remote",
+                        registry_username=self.docker_config["registry_username"],
+                        registry_password=self.docker_config["registry_password"]
+                    )
+            
+                    # 2. Normaliser le rapport Trivy
+                    image_events = self.trivy_normalizer.normalize(
+                        report,
+                        environment=environment
+                    )
+            
+                    # 3. Ajouter les événements
+                    events.extend(image_events)
+            
+                    print(
+                        f"Successfully scanned image: {image} "
+                        f"({len(image_events)} events)"
+                    )
+                    
+                    self.trivy_state.mark_registry_image_as_processed(
+                        client_id, project_id, image, digest
+                    )
+            
+                except (RuntimeError, ValueError, OSError) as error:
+                    print(f"Unable to scan Registry image {image}: {error}")
+                
+        except (requests.RequestException, RuntimeError, ValueError) as error:
+            print(f"Unable to discover GitLab Registry images: {error}")
     
         return events
     
+    def extract_trivy_dockerhub(self):
+
+        environment = os.getenv("TRIVY_ENVIRONMENT", "unknown")
+    
+        client_id = self.docker_config["client_id"]
+    
+        namespace = self.docker_config["dockerhub_namespace"]
+        repository = self.docker_config["dockerhub_repository"]
+    
+        # Identifier le repository pour le suivi des scans
+        project_id = f"{namespace}/{repository}"
+    
+        events = []
+    
+        try:
+            # 1. Découvrir les images Docker Hub
+            dockerhub_collector = DockerHubCollector(
+                namespace=namespace,
+                repository=repository,
+                username=self.docker_config["dockerhub_username"],
+                token=self.docker_config["dockerhub_token"]
+            )
+    
+            images = dockerhub_collector.discover_images_with_details()
+    
+            print(f"Found {len(images)} images in Docker Hub")
+    
+            # 2. Scanner chaque image découverte
+            for image_info in images:
+    
+                image = image_info["location"]
+                digest = image_info["digest"]
+    
+                print(f"\nImage : {image}")
+                print(f"Digest : {digest}")
+    
+                # 3. Vérifier si l'image a déjà été traitée
+                if self.trivy_state.is_registry_image_processed(
+                    client_id, project_id, image, digest
+                ):
+                    print(f"Skipping already processed Docker Hub image: {image}")
+                    continue
+    
+                print(f"Scanning Docker Hub image: {image}")
+    
+                try:
+                    # 4. Scanner l'image avec Trivy
+                    report = self.trivy_collector.collect(
+                        source="docker",
+                        image_name=image,
+                        image_source="remote",
+                        registry_username=self.docker_config["dockerhub_username"],
+                        registry_password=self.docker_config["dockerhub_token"]
+                    )
+    
+                    # 5. Normaliser le rapport
+                    image_events = self.trivy_normalizer.normalize(
+                        report,
+                        environment=environment
+                    )
+    
+                    events.extend(image_events)
+    
+                    # 6. Enregistrer le scan réussi
+                    self.trivy_state.mark_registry_image_as_processed(
+                        client_id, project_id, image, digest
+                    )
+    
+                    print(
+                        f"Successfully scanned Docker Hub image: {image} "
+                        f"({len(image_events)} events)"
+                    )
+    
+                except (RuntimeError, ValueError, OSError) as error:
+                    print(f"Unable to scan Docker Hub image {image}: {error}")
+    
+        except (requests.RequestException, RuntimeError, ValueError) as error:
+            print(f"Unable to discover Docker Hub images: {error}")
+    
+        return events

@@ -15,6 +15,7 @@ class TrivyState:
 
         self.projects = {}
         self.docker_images = {}
+        self.registry_images = {}
 
         self.load_state()
 
@@ -32,12 +33,14 @@ class TrivyState:
 
         self.projects = data.get("projects", {})
         self.docker_images = data.get("docker_images", {})
+        self.registry_images = data.get("registry_images", {})
 
     def save_state(self):
 
         data = {
             "projects": self.projects,
-            "docker_images": self.docker_images
+            "docker_images": self.docker_images,
+            "registry_images": self.registry_images
         }
 
         with open(self.file_path, "w", encoding="utf-8") as file:
@@ -159,3 +162,28 @@ class TrivyState:
     
         return image_state.get("image_id")
     
+    def is_registry_image_processed(
+        self, client_id, project_id, image_name, digest
+    ):
+        image_key = f"{client_id}:{project_id}:{image_name}"
+    
+        image_state = self.registry_images.get(image_key)
+    
+        return (
+            image_state is not None
+            and image_state.get("digest") == digest
+            and image_state.get("processed") is True
+        )
+
+
+    def mark_registry_image_as_processed(
+        self, client_id, project_id, image_name, digest
+    ):
+        image_key = f"{client_id}:{project_id}:{image_name}"
+    
+        self.registry_images[image_key] = {
+            "digest": digest,
+            "processed": True
+        }
+    
+        self.save_state()
