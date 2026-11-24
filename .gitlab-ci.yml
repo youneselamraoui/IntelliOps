@@ -1,7 +1,3 @@
-# ═══════════════════════════════════════════════════════════
-# IntelliOps : pipeline CI (INTELLIOPS-34) : Build et Run
-# ═══════════════════════════════════════════════════════════
-
 workflow:
   name: "IntelliOps CI - $CI_COMMIT_REF_NAME"
   rules:
@@ -15,66 +11,88 @@ stages:
   - build
   - run
 
-variables:
-  DOCKER_TLS_CERTDIR: "/certs"
-  DOCKER_BUILDKIT: "1"
-  IMAGE_TAG: $CI_COMMIT_SHORT_SHA
-
-default:
-  image: docker:27
-  services:
-    - docker:27-dind
-  before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-
 # ═══════════════════════════════════════════════════════════
-# PHASE 1 : BUILD
+# PHASE 1 : BUILD (Installation et compilation natifs)
 # ═══════════════════════════════════════════════════════════
 
 "Backend - Build":
   stage: build
+  image: php:8.4-cli-alpine
   timeout: 15 minutes
+  cache:
+    key: backend-$CI_COMMIT_SHA
+    paths:
+      - backend/vendor/
+      - backend/.env
+  before_script:
+    - apk add --no-cache git unzip icu-dev libzip-dev libpng-dev postgresql-dev curl
+    - docker-php-ext-install pdo_pgsql pgsql bcmath intl zip gd pcntl
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   script:
-    - docker build --target production -t "$CI_REGISTRY_IMAGE/backend:$IMAGE_TAG" ./backend
-    - docker push "$CI_REGISTRY_IMAGE/backend:$IMAGE_TAG"
+    - cd backend
+    - cp .env.example .env
+    - sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=array/' .env
+    - sed -i 's/^CACHE_STORE=.*/CACHE_STORE=array/' .env
+    - composer install --no-interaction --prefer-dist
+    - php artisan key:generate --force
 
 "Frontend - Build":
   stage: build
+  image: node:22-alpine
   timeout: 15 minutes
-  script:
-    - docker build --target production --build-arg VITE_API_URL=/api --build-arg VITE_KEYCLOAK_URL= -t "$CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG" ./frontend
-    - docker push "$CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG"
-
-# ═══════════════════════════════════════════════════════════
-# PHASE 2 : RUN
-# ═══════════════════════════════════════════════════════════
-
-"Stack - Run":
-  stage: run
-  needs: ["Backend - Build", "Frontend - Build"]
-  timeout: 10 minutes
-  
-  variables:
-    APP_KEY: "base64:MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
-  script:
-    # le réseau et les noms backend/frontend doivent rester tels quels (nginx appelle backend:9000)
-    - docker network create reseau_app
-    - docker run -d --name backend --network reseau_app -e APP_KEY="$APP_KEY" "$CI_REGISTRY_IMAGE/backend:$IMAGE_TAG"
-    - docker run -d --name frontend --network reseau_app "$CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG"
-    - sleep 15
-    - docker ps
-    # chaque commande qui échoue fait échouer le job
-    - docker exec backend php artisan --version
-    - docker exec backend php-fpm -t
-    - docker exec frontend wget -q -O /dev/null http://127.0.0.1/
-  after_script:
-    - docker logs backend > backend.log 2>&1 || true
-    - docker logs frontend > frontend.log 2>&1 || true
-
-  artifacts:
-    name: stack-logs
-    when: always
-    expire_in: 1 week
+  cache:
+    key: frontend-$CI_COMMIT_SHA
     paths:
-      - backend.log
-      - frontend.log
+      - frontend/node_modules/
+      - frontend/dist/
+  script:
+    - cd frontend
+    - npm ci
+    - npm run build
+
+# ═══════════════════════════════════════════════════════════
+# PHASE 2 : RUN (Exécution et vérification des services)
+# ═══════════════════════════════════════════════════════════
+
+"Backend - Run":
+  stage: run
+  image: php:8.4-cli-alpine
+  needs: ["Backend - Build"]
+  timeout: 10 minutes
+  cache:
+    key: backend-$CI_COMMIT_SHA
+    policy: pull
+    paths:
+      - backend/vendor/
+      - backend/.env
+  before_script:
+    - apk add --no-cache icu-dev libzip-dev libpng-dev postgresql-dev curl
+    - docker-php-ext-install pdo_pgsql pgsql bcmath intl zip gd pcntl
+  script:
+    - cd backend
+    - php artisan --version
+    - php artisan route:list
+    - php artisan serve --host=127.0.0.1 --port=8000 &
+    - SERVER_PID=$!
+    - sleep 3
+    - curl -f -s -o /dev/null http://127.0.0.1:8000/
+    - kill $SERVER_PID
+
+"Frontend - Run":
+  stage: run
+  image: node:22-alpine
+  needs: ["Frontend - Build"]
+  timeout: 10 minutes
+  cache:
+    key: frontend-$CI_COMMIT_SHA
+    policy: pull
+    paths:
+      - frontend/node_modules/
+      - frontend/dist/
+  script:
+    - cd frontend
+    - npx vite preview --host 127.0.0.1 --port 4173 &
+    - PREVIEW_PID=$!
+    - sleep 3
+    - wget -q -O /dev/null http://127.0.0.1:4173/
+    - kill $PREVIEW_PID
