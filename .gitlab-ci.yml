@@ -80,20 +80,18 @@ stages:
     paths:
       - backend/vendor/
       - backend/.env
-  before_script:
-    - apt-get update && apt-get install -y --no-install-recommends postgresql-client && rm -rf /var/lib/apt/lists/*
   script:
     - cd backend
-    # 1. Vérification PostgreSQL avec intervalle (2s) et timeout max (30s = 15 essais)
+    # 1. Attente connectivité PostgreSQL via PHP PDO (intervalle 2s, 15 essais max)
     - |
       TRIES=0
-      until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME"; do
+      until php -r "new PDO('pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));" 2>/dev/null; do
         TRIES=$((TRIES + 1))
         if [ "$TRIES" -ge 15 ]; then echo "Timeout PostgreSQL"; exit 1; fi
         sleep 2
       done
-    - PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -U "$DB_USERNAME" -d "$DB_DATABASE" -c "CREATE EXTENSION IF NOT EXISTS vector;"
-    # 2. Test des migrations Laravel sur la base pgvector
+    # 2. Activation de l'extension vector et exécution des migrations Laravel
+    - php artisan tinker --execute="DB::statement('CREATE EXTENSION IF NOT EXISTS vector;');"
     - php artisan migrate --force
     # 3. Démarrage du serveur et vérification HTTP (/up ou / sans erreur serveur 5xx)
     - php artisan --version
