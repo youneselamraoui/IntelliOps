@@ -1,0 +1,11 @@
+:root {
+  --teal: #0f766e;
+  --teal-light: #e2f3f1;
+  --purple: #6d4fe0;
+  --purple-light: #ede8fd;
+  --grey-light: #eceff3;
+  --text: #121826;
+  --text-muted: #5f6875;
+  --bg: #f2f5f8;
+  --radius-pill: 999px;
+}
