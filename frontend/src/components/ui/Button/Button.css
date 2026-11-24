@@ -1,0 +1,25 @@
+.btn {
+  height: 44px;
+  padding: 0 22px;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: white;
+  border: none;
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--text);
+  border: 1px solid #dfe4ea;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
