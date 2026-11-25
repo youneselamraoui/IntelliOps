@@ -1,4 +1,5 @@
-import { Database, GitBranch, Bug, Server, Shield, FileText, Layers } from "lucide-react";
+import { useState } from "react";
+import { Database, GitBranch, Bug, Server, Shield, FileText, Layers, Search } from "lucide-react";
 import SeverityBadge from "../../components/ui/SeverityBadge/SeverityBadge";
 import { incidents } from "../../mocks/incidents";
 import "./Incidents.css";
@@ -20,13 +21,64 @@ const STATUS_LABELS = {
   RESOLVED: "Résolu",
 };
 
+const FILTERS = [
+  { value: "ALL", label: "Toutes" },
+  { value: "CRITICAL", label: "Critique" },
+  { value: "HIGH", label: "Élevé" },
+  { value: "MEDIUM", label: "Moyen" },
+  { value: "LOW", label: "Faible" },
+];
+
 function Incidents() {
+  const [severityFilter, setSeverityFilter] = useState("ALL");
+  const [search, setSearch] = useState("");
+
+  const filteredIncidents = incidents.filter((incident) => {
+    const matchesSeverity =
+      severityFilter === "ALL" || incident.severity === severityFilter;
+
+    const text = `${incident.id} ${incident.title} ${incident.component}`.toLowerCase();
+    const matchesSearch = text.includes(search.toLowerCase());
+
+    return matchesSeverity && matchesSearch;
+  });
+
+  function countFor(value) {
+    if (value === "ALL") return incidents.length;
+    return incidents.filter((incident) => incident.severity === value).length;
+  }
+
   return (
     <div className="incidents-page">
       <h1>Incidents</h1>
       <p className="page-subtitle">
         Tous les incidents analysés par IntelliOps, avec ou sans action à valider.
       </p>
+
+      <div className="toolbar">
+        <div className="filter-pills">
+          {FILTERS.map((filter) => (
+            <button
+              key={filter.value}
+              className={severityFilter === filter.value ? "pill pill-active" : "pill"}
+              onClick={() => setSeverityFilter(filter.value)}
+            >
+              {filter.label} · {countFor(filter.value)}
+            </button>
+          ))}
+        </div>
+
+        <label className="search-box">
+          <Search size={18} />
+          <input
+            type="text"
+            placeholder="Rechercher un incident"
+            aria-label="Rechercher un incident"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+        </label>
+      </div>
 
       <div className="table-card">
         <table className="incidents-table">
@@ -42,7 +94,7 @@ function Incidents() {
           </thead>
 
           <tbody>
-            {incidents.map((incident) => {
+            {filteredIncidents.map((incident) => {
               const Icon = ICONS[incident.icon];
 
               return (
@@ -85,6 +137,10 @@ function Incidents() {
             })}
           </tbody>
         </table>
+
+        {filteredIncidents.length === 0 && (
+          <p className="empty">Aucun incident ne correspond à votre recherche.</p>
+        )}
       </div>
     </div>
   );
