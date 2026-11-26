@@ -1,0 +1,1295 @@
+<mxfile host="app.diagrams.net" pages="2">
+  <diagram name="Diagramme de classes IntelliOps (corrigé)" id="classdiag2">
+    <mxGraphModel dx="3923" dy="2031" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3000" pageHeight="2700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="k_Credential" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Credential" vertex="1">
+          <mxGeometry height="148" width="240" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Credential_a0" parent="k_Credential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_cred : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Credential_a1" parent="k_Credential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ type : TypeCredential" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Credential_a2" parent="k_Credential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ secret_ref : String" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Credential_a3" parent="k_Credential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_creation : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Credential_a4" parent="k_Credential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_expiration : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Credential_a5" parent="k_Credential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ actif : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Source" vertex="1">
+          <mxGeometry height="188" width="240" x="380" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source_a0" parent="k_Source" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_source : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source_a1" parent="k_Source" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nom : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source_a2" parent="k_Source" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ type : TypeSource" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source_a3" parent="k_Source" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ mode : ModeCollecte" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source_a4" parent="k_Source" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ url : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source_a5" parent="k_Source" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ intervalle_polling_s : int [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source_a6" parent="k_Source" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ actif : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Source_a7" parent="k_Source" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ derniere_collecte : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="DonneesCollectees" vertex="1">
+          <mxGeometry height="208" width="240" x="760" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a0" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_collecte : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a1" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_debut : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a2" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_fin : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a3" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ statut : StatutCollecte" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a4" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nb_evenements : int" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a5" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ checkpoint : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a6" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ contenu_masque : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a7" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ hash : String" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DonneesCollectees_a8" parent="k_DonneesCollectees" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_purge : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Environnement" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Environnement" vertex="1">
+          <mxGeometry height="108" width="240" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Environnement_a0" parent="k_Environnement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_env : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Environnement_a1" parent="k_Environnement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nom : TypeEnvironnement" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Environnement_a2" parent="k_Environnement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ cluster : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Environnement_a3" parent="k_Environnement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ namespace : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Projet" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Projet" vertex="1">
+          <mxGeometry height="128" width="240" x="380" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Projet_a0" parent="k_Projet" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_projet : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Projet_a1" parent="k_Projet" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nom : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Projet_a2" parent="k_Projet" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ url_depot : String" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Projet_a3" parent="k_Projet" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ description : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Projet_a4" parent="k_Projet" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ application : String" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Composant" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="Composant" vertex="1">
+          <mxGeometry height="128" width="240" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Composant_a0" parent="k_Composant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_composant : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Composant_a1" parent="k_Composant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nom : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Composant_a2" parent="k_Composant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ type : TypeComposant" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Composant_a3" parent="k_Composant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ etat : EtatComposant" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Composant_a4" parent="k_Composant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ derniere_maj : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="EvenementNormalise" vertex="1">
+          <mxGeometry height="328" width="240" x="760" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a0" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_evt : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a1" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ reference : String {unique}" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a2" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ timestamp : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a3" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ event_type : TypeEvenement" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a4" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ severity : Severite" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a5" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ status : StatutEvenement" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a6" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ message : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a7" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ log_level : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a8" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ empreinte : String" vertex="1">
+          <mxGeometry height="20" width="240" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a9" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nb_occurrences : int" vertex="1">
+          <mxGeometry height="20" width="240" y="208" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a10" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ premiere_occurrence : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="228" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a11" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ derniere_occurrence : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="248" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a12" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ /source : TypeSource" vertex="1">
+          <mxGeometry height="20" width="240" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a13" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ /component : String" vertex="1">
+          <mxGeometry height="20" width="240" y="288" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EvenementNormalise_a14" parent="k_EvenementNormalise" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ /environment : TypeEnvironnement" vertex="1">
+          <mxGeometry height="20" width="240" y="308" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Regle" vertex="1">
+          <mxGeometry height="188" width="240" x="1260" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle_a0" parent="k_Regle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_regle : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle_a1" parent="k_Regle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nom : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle_a2" parent="k_Regle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ type : TypeRegle" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle_a3" parent="k_Regle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ condition : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle_a4" parent="k_Regle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ severite_resultat : Severite [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle_a5" parent="k_Regle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ priorite : int" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle_a6" parent="k_Regle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ version : int" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Regle_a7" parent="k_Regle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ active : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Analyse" vertex="1">
+          <mxGeometry height="228" width="240" x="1260" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a0" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_analyse : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a1" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a2" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ methode : MethodeAnalyse" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a3" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ cause_probable : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a4" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ recommandation : Text [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a5" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ criticite : Severite" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a6" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ confiance : float [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a7" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ prompt_version : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a8" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ json_valide : boolean [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Analyse_a9" parent="k_Analyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ duree_ms : int [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="208" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ChunkDocument" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="ChunkDocument" vertex="1">
+          <mxGeometry height="108" width="240" x="1640" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ChunkDocument_a0" parent="k_ChunkDocument" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_chunk : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ChunkDocument_a1" parent="k_ChunkDocument" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ contenu : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ChunkDocument_a2" parent="k_ChunkDocument" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ ordre : int" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ChunkDocument_a3" parent="k_ChunkDocument" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ embedding : Vector" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="DocumentRAG" vertex="1">
+          <mxGeometry height="188" width="240" x="1640" y="1230" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG_a0" parent="k_DocumentRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_doc : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG_a1" parent="k_DocumentRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ titre : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG_a2" parent="k_DocumentRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ type : TypeDocument" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG_a3" parent="k_DocumentRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ contenu : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG_a4" parent="k_DocumentRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ source_url : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG_a5" parent="k_DocumentRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ version : String" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG_a6" parent="k_DocumentRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ hash : String" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DocumentRAG_a7" parent="k_DocumentRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_indexation : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="LLM" vertex="1">
+          <mxGeometry height="188" width="240" x="1640" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM_a0" parent="k_LLM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_llm : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM_a1" parent="k_LLM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nom_modele : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM_a2" parent="k_LLM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ version : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM_a3" parent="k_LLM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ fournisseur : Fournisseur" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM_a4" parent="k_LLM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ endpoint : String" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM_a5" parent="k_LLM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ temperature : float" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM_a6" parent="k_LLM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ seuil_confiance : float" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_LLM_a7" parent="k_LLM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ actif : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Incident" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Incident" vertex="1">
+          <mxGeometry height="168" width="240" x="760" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Incident_a0" parent="k_Incident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_incident : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Incident_a1" parent="k_Incident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ titre : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Incident_a2" parent="k_Incident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ criticite : Severite" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Incident_a3" parent="k_Incident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ statut : StatutIncident" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Incident_a4" parent="k_Incident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_ouverture : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Incident_a5" parent="k_Incident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_cloture : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Incident_a6" parent="k_Incident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ resume : Text [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Notification" vertex="1">
+          <mxGeometry height="208" width="240" x="1260" y="1180" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a0" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_notif : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a1" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ canal : Canal" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a2" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ sujet : String" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a3" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ message : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a4" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_envoi : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a5" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ statut : StatutNotification" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a6" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ tentatives : int" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a7" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ erreur : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Notification_a8" parent="k_Notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ destinataire_externe : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Action" vertex="1">
+          <mxGeometry height="248" width="240" x="760" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a0" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_action : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a1" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ description : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a2" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ type_action : String" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a3" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ cible : String" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a4" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ parametres : Text [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a5" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ niveau : NiveauAction" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a6" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ risque : Severite" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a7" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ mode_simulation : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a8" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ statut : StatutAction" vertex="1">
+          <mxGeometry height="20" width="240" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a9" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ resultat : Text [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="208" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Action_a10" parent="k_Action" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_execution : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="228" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Critere" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Critere" vertex="1">
+          <mxGeometry height="128" width="240" x="380" y="1130" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Critere_a0" parent="k_Critere" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_cri : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Critere_a1" parent="k_Critere" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ type_action : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Critere_a2" parent="k_Critere" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ risque_min : Severite" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Critere_a3" parent="k_Critere" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ validation_requise : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Critere_a4" parent="k_Critere" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ role_approbateur : RoleUtilisateur" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Validation" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Validation" vertex="1">
+          <mxGeometry height="148" width="240" x="760" y="1500" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Validation_a0" parent="k_Validation" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_val : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Validation_a1" parent="k_Validation" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ decision : Decision = EN_ATTENTE" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Validation_a2" parent="k_Validation" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_demande : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Validation_a3" parent="k_Validation" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_expiration : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Validation_a4" parent="k_Validation" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_decision : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Validation_a5" parent="k_Validation" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ commentaire : Text [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExecutionWorkflow" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="ExecutionWorkflow" vertex="1">
+          <mxGeometry height="148" width="240" x="760" y="1760" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExecutionWorkflow_a0" parent="k_ExecutionWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_run : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExecutionWorkflow_a1" parent="k_ExecutionWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ thread_id : String {unique}" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExecutionWorkflow_a2" parent="k_ExecutionWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ etat : EtatWorkflow" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExecutionWorkflow_a3" parent="k_ExecutionWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ erreur : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExecutionWorkflow_a4" parent="k_ExecutionWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_debut : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExecutionWorkflow_a5" parent="k_ExecutionWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date_fin : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Utilisateur" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="Utilisateur" vertex="1">
+          <mxGeometry height="168" width="240" x="380" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Utilisateur_a0" parent="k_Utilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_user : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Utilisateur_a1" parent="k_Utilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ nom : String" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Utilisateur_a2" parent="k_Utilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ email : String {unique}" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Utilisateur_a3" parent="k_Utilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ keycloak_id : String" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Utilisateur_a4" parent="k_Utilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ admin_global : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Utilisateur_a5" parent="k_Utilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ actif : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Utilisateur_a6" parent="k_Utilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ derniere_connexion : DateTime [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" value="AuditLog" vertex="1">
+          <mxGeometry height="208" width="240" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a0" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ id_audit : int {PK}" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a1" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ date : DateTime" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a2" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ action : String" vertex="1">
+          <mxGeometry height="20" width="240" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a3" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ objet_type : String" vertex="1">
+          <mxGeometry height="20" width="240" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a4" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ objet_id : int" vertex="1">
+          <mxGeometry height="20" width="240" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a5" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ details : Text" vertex="1">
+          <mxGeometry height="20" width="240" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a6" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ acteur_systeme : String [0..1]" vertex="1">
+          <mxGeometry height="20" width="240" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a7" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ hash : String" vertex="1">
+          <mxGeometry height="20" width="240" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="k_AuditLog_a8" parent="k_AuditLog" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ hash_precedent : String" vertex="1">
+          <mxGeometry height="20" width="240" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExtraitRAG" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="ExtraitRAG" vertex="1">
+          <mxGeometry height="68" width="240" x="1270" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExtraitRAG_a0" parent="k_ExtraitRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ score : float" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ExtraitRAG_a1" parent="k_ExtraitRAG" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ rang : int" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DestineeA" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#ffffff;" value="DestineeA" vertex="1">
+          <mxGeometry height="48" width="240" x="900" y="1362" as="geometry" />
+        </mxCell>
+        <mxCell id="k_DestineeA_a0" parent="k_DestineeA" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ lu : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_MembreProjet" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="MembreProjet" vertex="1">
+          <mxGeometry height="68" width="240" x="260" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="k_MembreProjet_a0" parent="k_MembreProjet" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ role : RoleUtilisateur" vertex="1">
+          <mxGeometry height="20" width="240" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="k_MembreProjet_a1" parent="k_MembreProjet" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="+ peut_approuver : boolean" vertex="1">
+          <mxGeometry height="20" width="240" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="k_RoleUtilisateur" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;RoleUtilisateur" vertex="1">
+          <mxGeometry height="142" width="200" x="2050" as="geometry" />
+        </mxCell>
+        <mxCell id="k_RoleUtilisateur_a0" parent="k_RoleUtilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="ADMIN" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_RoleUtilisateur_a1" parent="k_RoleUtilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DEVOPS" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_RoleUtilisateur_a2" parent="k_RoleUtilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="SECURITE" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_RoleUtilisateur_a3" parent="k_RoleUtilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DEVELOPPEUR" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_RoleUtilisateur_a4" parent="k_RoleUtilisateur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="OBSERVATEUR" vertex="1">
+          <mxGeometry height="20" width="200" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;TypeSource" vertex="1">
+          <mxGeometry height="222" width="200" x="2290" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a0" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="GITLAB" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a1" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="JENKINS" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a2" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="SONARQUBE" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a3" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="TRIVY" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a4" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="OWASP_ZAP" vertex="1">
+          <mxGeometry height="20" width="200" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a5" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DOCKER" vertex="1">
+          <mxGeometry height="20" width="200" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a6" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="KUBERNETES" vertex="1">
+          <mxGeometry height="20" width="200" y="162" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a7" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="PROMETHEUS" vertex="1">
+          <mxGeometry height="20" width="200" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeSource_a8" parent="k_TypeSource" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="LOGS_LINUX" vertex="1">
+          <mxGeometry height="20" width="200" y="202" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ModeCollecte" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;ModeCollecte" vertex="1">
+          <mxGeometry height="122" width="200" x="2530" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ModeCollecte_a0" parent="k_ModeCollecte" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="PUSH" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ModeCollecte_a1" parent="k_ModeCollecte" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="PULL" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ModeCollecte_a2" parent="k_ModeCollecte" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="STREAM" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_ModeCollecte_a3" parent="k_ModeCollecte" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="RAPPORT" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeCredential" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;TypeCredential" vertex="1">
+          <mxGeometry height="102" width="200" x="2530" y="152" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeCredential_a0" parent="k_TypeCredential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="TOKEN" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeCredential_a1" parent="k_TypeCredential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="HMAC_SECRET" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeCredential_a2" parent="k_TypeCredential" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="API_KEY" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEnvironnement" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;TypeEnvironnement" vertex="1">
+          <mxGeometry height="102" width="200" x="2050" y="172" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEnvironnement_a0" parent="k_TypeEnvironnement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DEV" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEnvironnement_a1" parent="k_TypeEnvironnement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="TEST" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEnvironnement_a2" parent="k_TypeEnvironnement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="PRODUCTION" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Severite" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;Severite" vertex="1">
+          <mxGeometry height="122" width="200" x="2290" y="252" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Severite_a0" parent="k_Severite" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="LOW" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Severite_a1" parent="k_Severite" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="MEDIUM" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Severite_a2" parent="k_Severite" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="HIGH" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Severite_a3" parent="k_Severite" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="CRITICAL" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutEvenement" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;StatutEvenement" vertex="1">
+          <mxGeometry height="142" width="200" x="2530" y="284" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutEvenement_a0" parent="k_StatutEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="NEW" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutEvenement_a1" parent="k_StatutEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="ANALYZED" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutEvenement_a2" parent="k_StatutEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="NOTIFIED" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutEvenement_a3" parent="k_StatutEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="IGNORED" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutEvenement_a4" parent="k_StatutEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DUPLICATE" vertex="1">
+          <mxGeometry height="20" width="200" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEvenement" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;TypeEvenement" vertex="1">
+          <mxGeometry height="182" width="200" x="2050" y="304" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEvenement_a0" parent="k_TypeEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="PIPELINE_FAILURE" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEvenement_a1" parent="k_TypeEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="VULNERABILITY" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEvenement_a2" parent="k_TypeEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="CODE_QUALITY" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEvenement_a3" parent="k_TypeEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="CONTAINER_EVENT" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEvenement_a4" parent="k_TypeEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="K8S_EVENT" vertex="1">
+          <mxGeometry height="20" width="200" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEvenement_a5" parent="k_TypeEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="METRIC_ALERT" vertex="1">
+          <mxGeometry height="20" width="200" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeEvenement_a6" parent="k_TypeEvenement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="LOG" vertex="1">
+          <mxGeometry height="20" width="200" y="162" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeRegle" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;TypeRegle" vertex="1">
+          <mxGeometry height="102" width="200" x="2290" y="404" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeRegle_a0" parent="k_TypeRegle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="FILTRAGE" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeRegle_a1" parent="k_TypeRegle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="CLASSIFICATION" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeRegle_a2" parent="k_TypeRegle" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="CORRELATION" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_MethodeAnalyse" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;MethodeAnalyse" vertex="1">
+          <mxGeometry height="102" width="200" x="2530" y="456" as="geometry" />
+        </mxCell>
+        <mxCell id="k_MethodeAnalyse_a0" parent="k_MethodeAnalyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="REGLE" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_MethodeAnalyse_a1" parent="k_MethodeAnalyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="LLM" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_MethodeAnalyse_a2" parent="k_MethodeAnalyse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="HYBRIDE" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeDocument" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;TypeDocument" vertex="1">
+          <mxGeometry height="122" width="200" x="2050" y="516" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeDocument_a0" parent="k_TypeDocument" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="RUNBOOK" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeDocument_a1" parent="k_TypeDocument" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="FAQ" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeDocument_a2" parent="k_TypeDocument" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DOC" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeDocument_a3" parent="k_TypeDocument" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="INCIDENT_PASSE" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutIncident" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;StatutIncident" vertex="1">
+          <mxGeometry height="162" width="200" x="2290" y="536" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutIncident_a0" parent="k_StatutIncident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="OUVERT" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutIncident_a1" parent="k_StatutIncident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EN_ANALYSE" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutIncident_a2" parent="k_StatutIncident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EN_COURS" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutIncident_a3" parent="k_StatutIncident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="RESOLU" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutIncident_a4" parent="k_StatutIncident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="CLOS" vertex="1">
+          <mxGeometry height="20" width="200" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutIncident_a5" parent="k_StatutIncident" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="FAUX_POSITIF" vertex="1">
+          <mxGeometry height="20" width="200" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="k_NiveauAction" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;NiveauAction" vertex="1">
+          <mxGeometry height="122" width="200" x="2530" y="588" as="geometry" />
+        </mxCell>
+        <mxCell id="k_NiveauAction_a0" parent="k_NiveauAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="INFO" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_NiveauAction_a1" parent="k_NiveauAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="RECO" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_NiveauAction_a2" parent="k_NiveauAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="AUTO" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_NiveauAction_a3" parent="k_NiveauAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="A_VALIDER" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Decision" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;Decision" vertex="1">
+          <mxGeometry height="122" width="200" x="2050" y="668" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Decision_a0" parent="k_Decision" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EN_ATTENTE" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Decision_a1" parent="k_Decision" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="APPROUVE" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Decision_a2" parent="k_Decision" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="REFUSE" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Decision_a3" parent="k_Decision" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EXPIRE" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Canal" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;Canal" vertex="1">
+          <mxGeometry height="122" width="200" x="2290" y="728" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Canal_a0" parent="k_Canal" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DASHBOARD" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Canal_a1" parent="k_Canal" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EMAIL" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Canal_a2" parent="k_Canal" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="TEAMS" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Canal_a3" parent="k_Canal" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="SLACK" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Fournisseur" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;Fournisseur" vertex="1">
+          <mxGeometry height="82" width="200" x="2530" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Fournisseur_a0" parent="k_Fournisseur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="OLLAMA" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_Fournisseur_a1" parent="k_Fournisseur" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="CLOUD" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutAction" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;StatutAction" vertex="1">
+          <mxGeometry height="182" width="200" x="2050" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutAction_a0" parent="k_StatutAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="PROPOSEE" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutAction_a1" parent="k_StatutAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EN_ATTENTE" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutAction_a2" parent="k_StatutAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="APPROUVEE" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutAction_a3" parent="k_StatutAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="REFUSEE" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutAction_a4" parent="k_StatutAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EXECUTEE" vertex="1">
+          <mxGeometry height="20" width="200" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutAction_a5" parent="k_StatutAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="ECHEC" vertex="1">
+          <mxGeometry height="20" width="200" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutAction_a6" parent="k_StatutAction" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EXPIREE" vertex="1">
+          <mxGeometry height="20" width="200" y="162" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutNotification" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;StatutNotification" vertex="1">
+          <mxGeometry height="102" width="200" x="2530" y="852" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutNotification_a0" parent="k_StatutNotification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EN_ATTENTE" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutNotification_a1" parent="k_StatutNotification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="ENVOYEE" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutNotification_a2" parent="k_StatutNotification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="ECHEC" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutCollecte" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;StatutCollecte" vertex="1">
+          <mxGeometry height="122" width="200" x="2290" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutCollecte_a0" parent="k_StatutCollecte" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EN_COURS" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutCollecte_a1" parent="k_StatutCollecte" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="TERMINEE" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutCollecte_a2" parent="k_StatutCollecte" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="PARTIELLE" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_StatutCollecte_a3" parent="k_StatutCollecte" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="ECHEC" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeComposant" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;TypeComposant" vertex="1">
+          <mxGeometry height="162" width="200" x="2530" y="984" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeComposant_a0" parent="k_TypeComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="BACKEND" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeComposant_a1" parent="k_TypeComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="FRONTEND" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeComposant_a2" parent="k_TypeComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="BASE_DONNEES" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeComposant_a3" parent="k_TypeComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="PIPELINE" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeComposant_a4" parent="k_TypeComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="CONTENEUR" vertex="1">
+          <mxGeometry height="20" width="200" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="k_TypeComposant_a5" parent="k_TypeComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="AUTRE" vertex="1">
+          <mxGeometry height="20" width="200" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatComposant" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;EtatComposant" vertex="1">
+          <mxGeometry height="122" width="200" x="2050" y="1032" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatComposant_a0" parent="k_EtatComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="UP" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatComposant_a1" parent="k_EtatComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DEGRADE" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatComposant_a2" parent="k_EtatComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="DOWN" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatComposant_a3" parent="k_EtatComposant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="INCONNU" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatWorkflow" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=42;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;EtatWorkflow" vertex="1">
+          <mxGeometry height="122" width="200" x="2290" y="1032" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatWorkflow_a0" parent="k_EtatWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EN_COURS" vertex="1">
+          <mxGeometry height="20" width="200" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatWorkflow_a1" parent="k_EtatWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="EN_PAUSE" vertex="1">
+          <mxGeometry height="20" width="200" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatWorkflow_a2" parent="k_EtatWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="TERMINE" vertex="1">
+          <mxGeometry height="20" width="200" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="k_EtatWorkflow_a3" parent="k_EtatWorkflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" value="ERREUR" vertex="1">
+          <mxGeometry height="20" width="200" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="k_Projet" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=0.5000;exitY=0.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5000;entryY=1.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Source" value="possède ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1_m0" connectable="0" parent="e1" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.5357" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e1_m1" connectable="0" parent="e1" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.5357" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="k_Source" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=0.0000;exitY=0.5000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Credential" value="s&#39;authentifie via ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2_m0" connectable="0" parent="e2" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2_m1" connectable="0" parent="e2" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="k_Source" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=1.0000;exitY=0.5000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.0000;entryY=0.4519;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_DonneesCollectees" value="collecte ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3_m0" connectable="0" parent="e3" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3_m1" connectable="0" parent="e3" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="k_DonneesCollectees" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_EvenementNormalise" value="se normalise en ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4_m0" connectable="0" parent="e4" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.4348" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4_m1" connectable="0" parent="e4" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.4348" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="k_Projet" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=0.0000;exitY=0.5000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Environnement" value="déployé dans ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5_m0" connectable="0" parent="e5" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5_m1" connectable="0" parent="e5" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="k_Environnement" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Composant" value="contient ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6_m0" connectable="0" parent="e6" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.4902" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6_m1" connectable="0" parent="e6" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.4902" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="k_EvenementNormalise" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.0000;exitY=0.7927;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.3125;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Composant" value="concerne ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7_m0" connectable="0" parent="e7" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7_m1" connectable="0" parent="e7" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="k_EvenementNormalise" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=1.0000;exitY=0.8354;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Regle" value="écartée par ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8_m0" connectable="0" parent="e8" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.8" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8_m1" connectable="0" parent="e8" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.8" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="k_EvenementNormalise" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.3333;exitY=1.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.3333;entryY=0.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Incident" value="regroupé dans ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9_m0" connectable="0" parent="e9" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.6061" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9_m1" connectable="0" parent="e9" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.6061" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="k_Incident" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=1.0000;exitY=0.2381;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.0000;entryY=0.1754;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Analyse" value="est analysé par ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10_m0" connectable="0" parent="e10" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10_m1" connectable="0" parent="e10" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="k_Analyse" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.5000;exitY=0.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5000;entryY=1.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Regle" value="applique ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11_m0" connectable="0" parent="e11" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.4348" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11_m1" connectable="0" parent="e11" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.4348" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="k_Analyse" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=1.0000;exitY=0.3070;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.0000;entryY=0.3723;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_LLM" value="produite par ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12_m0" connectable="0" parent="e12" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12_m1" connectable="0" parent="e12" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="k_Analyse" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=1.0000;exitY=0.8333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.0000;entryY=0.4630;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_ChunkDocument" value="s&#39;appuie sur ▶">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1560" y="950" />
+              <mxPoint x="1560" y="1060" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13_m0" connectable="0" parent="e13" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.792" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13_m1" connectable="0" parent="e13" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.792" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="k_DocumentRAG" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=0.5000;exitY=0.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5000;entryY=1.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_ChunkDocument" value="découpé en ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14_m0" connectable="0" parent="e14" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.5357" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14_m1" connectable="0" parent="e14" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.5357" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="k_Incident" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Action" value="propose ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15_m0" connectable="0" parent="e15" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.6977" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15_m1" connectable="0" parent="e15" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.6977" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="k_Action" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.0000;exitY=0.3629;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.4688;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Critere" value="régie par ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16_m0" connectable="0" parent="e16" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16_m1" connectable="0" parent="e16" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="k_Action" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Validation" value="exige ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17_m0" connectable="0" parent="e17" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.6579" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e17_m1" connectable="0" parent="e17" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.6579" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="k_Utilisateur" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=1.0000;exitY=0.5952;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.0000;entryY=0.4054;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Validation" value="décide ▶">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="1000" />
+              <mxPoint x="680" y="1560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18_m0" connectable="0" parent="e18" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="-0.9257" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18_m1" connectable="0" parent="e18" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.9257" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="k_Incident" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.0000;exitY=0.3571;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.2976;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Utilisateur" value="assigné à ▶">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="820" />
+              <mxPoint x="720" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19_m0" connectable="0" parent="e19" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.8074" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19_m1" connectable="0" parent="e19" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.8074" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="k_Incident" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;startArrow=diamondThin;startFill=1;startSize=14;exitX=1.0000;exitY=0.7143;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.0000;entryY=0.3365;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Notification" value="notifie ▶">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1140" y="880" />
+              <mxPoint x="1140" y="1250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20_m0" connectable="0" parent="e20" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9175" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20_m1" connectable="0" parent="e20" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.9175" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="k_Notification" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.0000;exitY=0.7212;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.9274;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Action" value="déclenchée par ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21_m0" connectable="0" parent="e21" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.8" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21_m1" connectable="0" parent="e21" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.8" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="k_Notification" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.7500;exitY=1.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.4054;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Validation" value="déclenchée par ▶">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1440" y="1560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22_m0" connectable="0" parent="e22" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.915" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22_m1" connectable="0" parent="e22" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.915" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23" edge="1" parent="1" source="k_Notification" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.1667;exitY=1.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.8929;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Utilisateur" value="destinée à ▶">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1300" y="1440" />
+              <mxPoint x="640" y="1440" />
+              <mxPoint x="640" y="1050" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23_m0" connectable="0" parent="e23" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.9537" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23_m1" connectable="0" parent="e23" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.9537" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="k_ExecutionWorkflow" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.5000;exitY=0.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5000;entryY=1.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Validation" value="suspend ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24_m0" connectable="0" parent="e24" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.5357" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e24_m1" connectable="0" parent="e24" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.5357" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e25" edge="1" parent="1" source="k_Utilisateur" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.0000;exitY=0.5000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_AuditLog" value="est l&#39;acteur de ▶">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25_m0" connectable="0" parent="e25" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="-0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e25_m1" connectable="0" parent="e25" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.6286" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e26" edge="1" parent="1" source="k_Projet" style="html=1;rounded=0;endArrow=none;strokeColor=#333333;fontSize=11;fontStyle=2;labelBackgroundColor=#ffffff;exitX=0.5833;exitY=1.0000;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5833;entryY=0.0000;entryDx=0;entryDy=0;entryPerimeter=0;" target="k_Utilisateur" value="a pour membres">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26_m0" connectable="0" parent="e26" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.8898" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e26_m1" connectable="0" parent="e26" style="edgeLabel;resizable=0;html=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.8898" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d_ExtraitRAG" edge="1" parent="1" source="k_ExtraitRAG" style="edgeStyle=none;html=1;endArrow=none;dashed=1;strokeColor=#333333;" target="e13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_DestineeA" edge="1" parent="1" source="k_DestineeA" style="edgeStyle=none;html=1;endArrow=none;dashed=1;strokeColor=#333333;" target="e23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_MembreProjet" edge="1" parent="1" source="k_MembreProjet" style="edgeStyle=none;html=1;endArrow=none;dashed=1;strokeColor=#333333;" target="e26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_xor" edge="1" parent="1" source="e21" style="edgeStyle=none;html=1;endArrow=none;dashed=1;strokeColor=#c00000;fontColor=#c00000;fontStyle=1;" target="e22" value="{au plus un}">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Corrections apportées" id="changes">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="chg" value="&lt;h2&gt;IntelliOps – Diagramme de classes : corrections&lt;/h2&gt;&lt;h3&gt;Erreurs corrigées&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Incident créé avant l&#39;Analyse : Evenement 0..* → 0..1 Incident « regroupé dans », puis Incident ◆— 0..* Analyse « est analysé par ». Un incident existe même si le LLM est indisponible, et peut être ré-analysé. La classe d&#39;association EstAnalyseDans disparaît.&lt;/li&gt;&lt;li&gt;LLM et DocumentRAG rattachés à Analyse (plus à Incident) ; classe d&#39;association ExtraitRAG (score, rang) ; DocumentRAG découpé en ChunkDocument (embedding).&lt;/li&gt;&lt;li&gt;Validation : decision = EN_ATTENTE par défaut (+ EXPIRE), date_decision optionnelle, Utilisateur 0..1, date_expiration ajoutée.&lt;/li&gt;&lt;li&gt;AuditLog : relation avec Utilisateur (acteur) + acteur_systeme, objet_type/objet_id à la place des deux relations, hash ajouté.&lt;/li&gt;&lt;li&gt;Notification : rattachée à un Incident (1) ; déclencheur Action ou Validation, au plus un.&lt;/li&gt;&lt;li&gt;DonneesCollectees : contenu_brut remplacé par contenu_masque + date_purge.&lt;/li&gt;&lt;li&gt;TypeSource : liste complète (plus de « ... »).&lt;/li&gt;&lt;li&gt;EvenementNormalise : /source, /component, /environment dérivés ; event_type en énumération TypeEvenement ; liens directs Projet et Environnement supprimés.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Incohérences corrigées&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Statuts typés : StatutAction, StatutNotification, StatutCollecte ; StatutEvenement + IGNORED, DUPLICATE ; StatutIncident + EN_ANALYSE, CLOS, FAUX_POSITIF.&lt;/li&gt;&lt;li&gt;Source : cle_api_hash supprimé ; Credential en composition (Source 1 — 0..*), secret_ref à la place de secret_chiffre.&lt;/li&gt;&lt;li&gt;Rôles : RoleUtilisateur sans APPROBATEUR/TECH (+ DEVOPS, DEVELOPPEUR, OBSERVATEUR) ; permission peut_approuver et rôle portés par MembreProjet.&lt;/li&gt;&lt;li&gt;Libellés de relations uniques, avec sens de lecture ▶ ; compositions explicites ; relation « avoir » remplacée par « a pour membres ».&lt;/li&gt;&lt;li&gt;Criticité : règle documentée (Incident = max des Analyses).&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Ajouts&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Classes : Composant, ChunkDocument, MembreProjet, ExecutionWorkflow (thread_id pour la reprise LangGraph après validation).&lt;/li&gt;&lt;li&gt;Relations : Incident assigné à Utilisateur ; Evenement écarté par Regle ; Evenement regroupé dans Incident.&lt;/li&gt;&lt;li&gt;Attributs : Analyse (recommandation, prompt_version, json_valide, duree_ms), Action (cible, parametres, resultat, date_execution), LLM (endpoint, temperature, version), Regle (priorite, version, CORRELATION), Evenement (nb_occurrences, premières/dernières occurrences), Notification (sujet, tentatives, erreur, destinataire_externe).&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Points laissés ouverts&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Pas de lien Incident → DocumentRAG (capitalisation des incidents passés) ni Incident → Composant : à ajouter si besoin ; les documents INCIDENT_PASSE restent possibles via TypeDocument.&lt;/li&gt;&lt;li&gt;ExecutionWorkflow n&#39;est lié qu&#39;à Validation ; pour tracer chaque exécution, le relier à Incident (1 — 0..*).&lt;/li&gt;&lt;li&gt;Quelques croisements de lignes subsistent : à réajuster à la main dans draw.io si besoin.&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;whiteSpace=wrap;overflow=fill;align=left;verticalAlign=top;fontSize=12;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1100" height="900" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
