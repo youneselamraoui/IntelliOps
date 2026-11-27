@@ -414,6 +414,116 @@ class TrivyCollector(BaseCollector) :
         return report
 
 
+    def discover_github_runs(
+        self,
+        owner,
+        repo,
+        last_seen_run_id=0,
+        pending_run_ids=None,
+        workflow=None,
+        max_pages=5
+    ):
+        """Équivalent de discover_gitlab_jobs pour GitHub Actions.
+
+        workflow : nom du fichier du workflow Trivy (ex. "trivy.yml").
+        Retourne (runs prêts, ids encore en attente, plus grand id vu).
+        """
+
+        token = os.getenv("GITHUB_TOKEN")
+
+        if not token:
+            raise ValueError("GITHUB_TOKEN is missing")
+
+        api_base = os.getenv(
+            "GITHUB_API_URL", "https://api.github.com"
+        ).rstrip("/")
+
+        repo_url = f"{api_base}/repos/{owner}/{repo}"
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
+
+        ready_runs = []
+        still_pending = []
+        max_seen_run_id = int(last_seen_run_id)
+
+        # 1. Vérifier les runs précédemment en attente
+        for run_id in pending_run_ids or []:
+
+            response = requests.get(
+                f"{repo_url}/actions/runs/{run_id}",
+                headers=headers,
+                timeout=60
+            )
+
+            response.raise_for_status()
+
+            run = response.json()
+
+            if run.get("status") != "completed":
+                still_pending.append(str(run_id))
+
+            elif run.get("conclusion") == "success":
+                ready_runs.append(run)
+
+            # Les runs failure, cancelled, skipped... ne sont pas conservés.
+
+        # 2. Découvrir les nouveaux runs (du plus récent au plus ancien)
+        if workflow:
+            url = f"{repo_url}/actions/workflows/{workflow}/runs"
+        else:
+            url = f"{repo_url}/actions/runs"
+
+        stop_search = False
+
+        for page in range(1, max_pages + 1):
+
+            response = requests.get(
+                url,
+                headers=headers,
+                params={"per_page": 100, "page": page},
+                timeout=60
+            )
+
+            response.raise_for_status()
+
+            runs = response.json().get("workflow_runs", [])
+
+            if not runs:
+                break
+
+            for run in runs:
+
+                run_id = int(run["id"])
+
+                # Les runs plus anciens ont déjà été observés
+                if run_id <= int(last_seen_run_id):
+                    stop_search = True
+                    break
+
+                max_seen_run_id = max(max_seen_run_id, run_id)
+
+                if run.get("status") != "completed":
+                    still_pending.append(str(run_id))
+
+                elif run.get("conclusion") == "success":
+                    ready_runs.append(run)
+
+            if stop_search or len(runs) < 100:
+                break
+
+        # 3. Éviter les doublons
+        unique_runs = {str(run["id"]): run for run in ready_runs}
+        unique_pending = list(set(still_pending))
+
+        return (
+            list(unique_runs.values()),
+            unique_pending,
+            max_seen_run_id
+        )
     
     def discover_gitlab_jobs(
         self,

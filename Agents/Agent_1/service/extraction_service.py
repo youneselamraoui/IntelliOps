@@ -10,6 +10,9 @@ from normalizers.trivy_normalizer import TrivyNormalizer
 from state.pipeline_state import PipelineState
 from state.trivy_state import TrivyState
 from docker_config import get_docker_config
+from collectors.github_collector import GitHubCollector
+from normalizers.github_normalizer import GitHubNormalizer
+from state.github_state import GitHubState
 class ExtractionService:
 
     def __init__(self):
@@ -23,6 +26,16 @@ class ExtractionService:
         self.trivy_normalizer = TrivyNormalizer()
         self.trivy_state = TrivyState()
         self.docker_config = get_docker_config()
+                # Composants GitHub (activés seulement si la configuration existe)
+        self.github_enabled = all(
+            os.getenv(name)
+            for name in ("GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO")
+        )
+
+        if self.github_enabled:
+            self.github_collector = GitHubCollector()
+            self.github_normalizer = GitHubNormalizer()
+            self.github_state = GitHubState()
 
     def extract(self):
         # Liste commune pour toutes les sources
@@ -30,9 +43,18 @@ class ExtractionService:
         # Extraction GitLab
         gitlab_events = self.extract_gitlab()
         events.extend(gitlab_events)
+
         # Extraction Trivy
         trivy_events = self.extract_trivy()
         events.extend(trivy_events)
+
+                # Extraction GitHub Actions
+        github_events = self.extract_github()
+        events.extend(github_events)
+
+        # Extraction Trivy via les artifacts GitHub
+        github_trivy_events = self.extract_trivy_github()
+        events.extend(github_trivy_events)
         
         file_events = self.extract_trivy_file()
         events.extend(file_events)
@@ -67,6 +89,140 @@ class ExtractionService:
             )
 
         return events
+    
+    def extract_github(self):
+
+        if not self.github_enabled:
+            return []
+
+        events = []
+        repository = self.github_collector.project_id
+
+        try:
+            runs = self.github_collector.collect()
+        except requests.exceptions.RequestException as error:
+            print(f"Unable to collect GitHub workflow runs: {error}")
+            return []
+
+        for run in runs:
+            run_id = run["id"]
+
+            # Un run non terminé n'a pas encore de résultat définitif
+            if run.get("status") != "completed":
+                continue
+
+            run_status = run.get("conclusion") or run["status"]
+
+            if self.github_state.is_processed(
+                repository, run_id, run_status
+            ):
+                continue
+
+            try:
+                # Jobs et logs récupérés seulement pour les nouveaux runs
+                run = self.github_collector.enrich_run(run)
+            except requests.exceptions.RequestException as error:
+                # Le run sera retenté à la prochaine exécution
+                print(f"Unable to enrich GitHub run {run_id}: {error}")
+                continue
+
+            events.extend(self.github_normalizer.normalize(run))
+
+            self.github_state.mark_as_processed(
+                repository, run_id, run_status
+            )
+
+        return events
+
+    def extract_trivy_github(self):
+
+        # Activé uniquement si le workflow Trivy est indiqué (ex. trivy.yml)
+        workflow = os.getenv("TRIVY_GITHUB_WORKFLOW")
+
+        if not self.github_enabled or not workflow:
+            return []
+
+        owner = os.getenv("GITHUB_OWNER")
+        repo = os.getenv("GITHUB_REPO")
+        project_id = f"{owner}/{repo}"
+        artifact_name = os.getenv(
+            "TRIVY_GITHUB_ARTIFACT_NAME", "trivy-report"
+        )
+        environment = os.getenv("TRIVY_ENVIRONMENT", "unknown")
+
+        last_seen_run_id = self.trivy_state.get_last_seen_job_id(project_id)
+        pending_run_ids = list(self.trivy_state.get_pending_jobs(project_id))
+
+        try:
+            ready_runs, still_pending, max_seen_run_id = (
+                self.trivy_collector.discover_github_runs(
+                    owner=owner,
+                    repo=repo,
+                    last_seen_run_id=last_seen_run_id,
+                    pending_run_ids=pending_run_ids,
+                    workflow=workflow
+                )
+            )
+        except requests.exceptions.RequestException as error:
+            print(f"Unable to discover GitHub Trivy runs: {error}")
+            return []
+
+        # Mettre à jour la liste des runs à suivre
+        active_run_ids = set(still_pending) | {
+            str(run["id"]) for run in ready_runs
+        }
+
+        for run_id in pending_run_ids:
+            if str(run_id) not in active_run_ids:
+                self.trivy_state.remove_pending(project_id, run_id)
+
+        for run_id in still_pending:
+            self.trivy_state.add_pending(project_id, run_id)
+
+        for run in ready_runs:
+            self.trivy_state.add_pending(project_id, run["id"])
+
+        self.trivy_state.update_watermark(project_id, max_seen_run_id)
+
+        events = []
+
+        for run in ready_runs:
+            run_id = str(run["id"])
+
+            if self.trivy_state.is_processed(project_id, run_id):
+                self.trivy_state.remove_pending(project_id, run_id)
+                continue
+
+            try:
+                report = self.trivy_collector.collect_from_github(
+                    owner=owner,
+                    repo=repo,
+                    run_id=run_id,
+                    artifact_name=artifact_name
+                )
+
+                events.extend(
+                    self.trivy_normalizer.normalize(
+                        report, environment=environment
+                    )
+                )
+
+                self.trivy_state.mark_as_processed(project_id, run_id)
+
+            except requests.exceptions.RequestException as error:
+                # Le run reste en attente pour une prochaine tentative
+                print(
+                    f"Unable to download Trivy report for run {run_id}: "
+                    f"{error}"
+                )
+
+            except (FileNotFoundError, ValueError) as error:
+                # Artifact absent, expiré ou invalide : inutile de réessayer
+                print(f"No usable Trivy report for run {run_id}: {error}")
+                self.trivy_state.mark_as_processed(project_id, run_id)
+
+        return events
+    
     
     def extract_trivy(self):
         # 1. Récupérer la configuration depuis .env    
