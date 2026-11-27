@@ -6,75 +6,127 @@ workflow:
   name: "IntelliOps CI - $CI_COMMIT_REF_NAME"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
-      when: never
-    - if: $CI_COMMIT_BRANCH
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+default:
+  timeout: 10 minutes
+  retry:
+    max: 1
+    when:
+      - runner_system_failure
+      - stuck_or_timeout_failure
+      - api_failure
 
 stages:
   - build
   - run
 
-variables:
-  DOCKER_TLS_CERTDIR: "/certs"
-  DOCKER_BUILDKIT: "1"
-  IMAGE_TAG: $CI_COMMIT_SHORT_SHA
-
-default:
-  image: docker:27
-  services:
-    - docker:27-dind
-  before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-
 # ═══════════════════════════════════════════════════════════
-# PHASE 1 : BUILD
+# PHASE 1 : BUILD (Installation et compilation natifs)
 # ═══════════════════════════════════════════════════════════
 
 "Backend - Build":
   stage: build
-  timeout: 15 minutes
+  image: serversideup/php:8.4-cli
+  cache:
+    key: backend-$CI_COMMIT_SHA
+    paths:
+      - backend/vendor/
+      - backend/.env
   script:
-    - docker build --target production -t "$CI_REGISTRY_IMAGE/backend:$IMAGE_TAG" ./backend
-    - docker push "$CI_REGISTRY_IMAGE/backend:$IMAGE_TAG"
+    - cd backend
+    - cp .env.example .env
+    - composer install --no-interaction --prefer-dist
+    - php artisan key:generate --force
 
 "Frontend - Build":
   stage: build
-  timeout: 15 minutes
-  script:
-    - docker build --target production --build-arg VITE_API_URL=/api --build-arg VITE_KEYCLOAK_URL= -t "$CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG" ./frontend
-    - docker push "$CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG"
-
-# ═══════════════════════════════════════════════════════════
-# PHASE 2 : RUN
-# ═══════════════════════════════════════════════════════════
-
-"Stack - Run":
-  stage: run
-  needs: ["Backend - Build", "Frontend - Build"]
-  timeout: 10 minutes
-  
-  variables:
-    APP_KEY: "base64:MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
-  script:
-    # le réseau et les noms backend/frontend doivent rester tels quels (nginx appelle backend:9000)
-    - docker network create reseau_app
-    - docker run -d --name backend --network reseau_app -e APP_KEY="$APP_KEY" "$CI_REGISTRY_IMAGE/backend:$IMAGE_TAG"
-    - docker run -d --name frontend --network reseau_app "$CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG"
-    - sleep 15
-    - docker ps
-    # chaque commande qui échoue fait échouer le job
-    - docker exec backend php artisan --version
-    - docker exec backend php-fpm -t
-    - docker exec frontend wget -q -O /dev/null http://127.0.0.1/
-  after_script:
-    - docker logs backend > backend.log 2>&1 || true
-    - docker logs frontend > frontend.log 2>&1 || true
-
-  artifacts:
-    name: stack-logs
-    when: always
-    expire_in: 1 week
+  image: node:22-alpine
+  cache:
+    key: frontend-$CI_COMMIT_SHA
     paths:
-      - backend.log
-      - frontend.log
+      - frontend/node_modules/
+      - frontend/dist/
+  script:
+    - cd frontend
+    - npm ci
+    - npm run build
+
+# ═══════════════════════════════════════════════════════════
+# PHASE 2 : RUN (Exécution, connectivité DB/pgvector & migrations)
+# ═══════════════════════════════════════════════════════════
+
+"Backend - Run":
+  stage: run
+  image: serversideup/php:8.4-cli
+  needs: ["Backend - Build"]
+  services:
+    - name: pgvector/pgvector:pg16
+      alias: postgres
+  variables:
+    POSTGRES_DB: intelliops_test
+    POSTGRES_USER: intelliops
+    POSTGRES_PASSWORD: intelliops_ci_password
+    DB_CONNECTION: pgsql
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    DB_DATABASE: intelliops_test
+    DB_USERNAME: intelliops
+    DB_PASSWORD: intelliops_ci_password
+  cache:
+    key: backend-$CI_COMMIT_SHA
+    policy: pull
+    paths:
+      - backend/vendor/
+      - backend/.env
+  script:
+    - cd backend
+    # 1. Attente connectivité PostgreSQL via PHP PDO (intervalle 2s, 15 essais max)
+    - |
+      TRIES=0
+      until php -r "new PDO('pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));" 2>/dev/null; do
+        TRIES=$((TRIES + 1))
+        if [ "$TRIES" -ge 15 ]; then echo "Timeout PostgreSQL"; exit 1; fi
+        sleep 2
+      done
+    # 2. Activation de l'extension vector et exécution des migrations Laravel
+    - php artisan tinker --execute="DB::statement('CREATE EXTENSION IF NOT EXISTS vector;');"
+    - php artisan migrate --force
+    # 3. Démarrage du serveur et vérification HTTP (/up ou / sans erreur serveur 5xx)
+    - php artisan --version
+    - php artisan serve --host=127.0.0.1 --port=8000 &
+    - SERVER_PID=$!
+    - |
+      TRIES=0
+      until STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/up) && [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 500 ]; do
+        TRIES=$((TRIES + 1))
+        if [ "$TRIES" -ge 5 ]; then kill $SERVER_PID; echo "Timeout Backend (HTTP $STATUS)"; exit 1; fi
+        sleep 2
+      done
+      echo "Backend HTTP OK (status: $STATUS)"
+    - kill $SERVER_PID
+
+"Frontend - Run":
+  stage: run
+  image: node:22-alpine
+  needs: ["Frontend - Build"]
+  cache:
+    key: frontend-$CI_COMMIT_SHA
+    policy: pull
+    paths:
+      - frontend/node_modules/
+      - frontend/dist/
+  script:
+    - cd frontend
+    - npx vite preview --host 127.0.0.1 --port 4173 &
+    - PREVIEW_PID=$!
+    # Vérification HTTP avec intervalle (2s) et 5 essais max
+    - |
+      TRIES=0
+      until wget -q -O /dev/null http://127.0.0.1:4173/; do
+        TRIES=$((TRIES + 1))
+        if [ "$TRIES" -ge 5 ]; then kill $PREVIEW_PID; echo "Timeout Frontend"; exit 1; fi
+        sleep 2
+      done
+    - kill $PREVIEW_PID
